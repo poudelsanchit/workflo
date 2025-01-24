@@ -4,7 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
 const quicksand = Quicksand({
-  weight: ["500", "600"],
+  weight: ["300", "400", "500", "500", "600", "700"],
   style: ["normal"],
   subsets: ["latin"],
 });
