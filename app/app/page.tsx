@@ -13,7 +13,6 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Poppins, Quicksand } from "next/font/google";
 
 
 export default function Page() {

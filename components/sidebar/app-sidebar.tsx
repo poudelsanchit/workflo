@@ -17,7 +17,7 @@ import {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // State to manage the navMain data
-  const [navMainData, setNavMainData] = React.useState([
+  const navMainData = [
     {
       title: "Personal",
       url: "#",
@@ -42,7 +42,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         },
       ],
     },
-  ]);
+  ]
 
   const [projects] = React.useState([
     {
