@@ -14,15 +14,11 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Poppins, Quicksand } from "next/font/google";
-const poppins = Quicksand({
-  weight: ["500", "600"],
-  style: ["normal"],
-  subsets: ["latin"],
-});
+
 
 export default function Page() {
   return (
-    <SidebarProvider className={poppins.className}>
+    <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">

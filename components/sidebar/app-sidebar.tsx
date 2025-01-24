@@ -68,22 +68,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     avatar: "/avatars/shadcn.jpg",
   };
 
-  // Handler to add a new item
-  const handleAddNewItem = (title: string) => {
-    setNavMainData((prev) =>
-      prev.map((section) =>
-        section.title === title
-          ? {
-              ...section,
-              items: [
-                ...section.items,
-                { title: "Untitled", url: "#" }, // Add new "Untitled" item
-              ],
-            }
-          : section
-      )
-    );
-  };
+  
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -92,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         {/* Pass data and handler to NavMain */}
-        <NavMain items={navMainData} onAddNewItem={handleAddNewItem} />
+        <NavMain items={navMainData} />
         <NavProjects projects={projects} />
       </SidebarContent>
       <SidebarFooter>
