@@ -1,3 +1,4 @@
+'use client'
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import {
   Breadcrumb,
@@ -13,9 +14,10 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-
+import { useSession } from "next-auth/react";
 
 export default function Page() {
+  const { data: session,status } = useSession();
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -45,7 +47,10 @@ export default function Page() {
             <div className="aspect-video rounded-xl bg-muted/50" />
             <div className="aspect-video rounded-xl bg-muted/50" />
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
+            Logged in as {session?.user?.name} <br />
+            {status}
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
