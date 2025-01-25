@@ -1,4 +1,5 @@
 'use client'
+
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import {
   Breadcrumb,
@@ -15,9 +16,23 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useSession } from "next-auth/react";
+import useUserStore from "../store/useStore";  // Import Zustand store
+import { useEffect } from "react";
 
 export default function Page() {
-  const { data: session,status } = useSession();
+  const { data: session, status } = useSession();
+  const setUser = useUserStore((state) => state.setUser);
+
+  useEffect(() => {
+    if (session?.user && !useUserStore.getState().user.id) {
+      setUser({
+        id: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+      });
+    }
+  }, [session, setUser]); // Only run when session data changes
+
   return (
     <SidebarProvider>
       <AppSidebar />
