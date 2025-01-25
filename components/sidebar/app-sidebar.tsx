@@ -62,11 +62,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
   ]);
 
-  const user = {
-    name: "poudelsanchit",
-    email: "snchtpdl12@gmail.com",
-    avatar: "/avatars/shadcn.jpg",
-  };
+
 
   
 

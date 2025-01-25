@@ -1,7 +1,7 @@
 "use client";
 
 import { Plus } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -22,25 +22,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import useUserStore from "@/app/store/userStore";
 
-export function NavMain({
-  items,
-}: {
-  items: {
-    title: string;
-    url: string;
-    isActive?: boolean;
-    tooltip: string;
-    items?: {
-      title: string;
-      url: string;
-    }[];
-  }[];
-}) {
+export function NavMain() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentItemTitle, setCurrentItemTitle] = useState<string | null>(null);
+
+  // Fetch the `private` and `teamspace` data from the store
+  const privatePages = useUserStore((state) => state.user?.pages.private);
+  const teamspacePages = useUserStore((state) => state.user?.pages.teamspace);
 
   const handleCreateNewPage = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -55,6 +53,27 @@ export function NavMain({
     console.log(`Create a new page under "${currentItemTitle}"`);
     setIsDialogOpen(false);
   };
+
+  const items = [
+    {
+      title: "Private Pages",
+      tooltip: "Your private pages",
+      isActive: true,
+      items: privatePages?.map((page) => ({
+        title: page.title,
+        url: `/private/${page.pageId}`,
+      })),
+    },
+    {
+      title: "Teamspace Pages",
+      tooltip: "Teamspace shared pages",
+      isActive: false,
+      items: teamspacePages?.map((page) => ({
+        title: page.title,
+        url: `/teamspace/${page.pageId}`,
+      })),
+    },
+  ];
 
   return (
     <>
@@ -93,7 +112,7 @@ export function NavMain({
                 <CollapsibleContent>
                   <SidebarMenuSub>
                     {item.items?.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.title}>
+                      <SidebarMenuSubItem key={subItem.url}>
                         <SidebarMenuSubButton asChild>
                           <a href={subItem.url}>
                             <span>{subItem.title}</span>

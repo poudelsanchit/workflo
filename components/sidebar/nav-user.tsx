@@ -30,11 +30,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { signOut } from "next-auth/react"
-import useUserStore from "@/app/store/useStore"
 
 export default function NavUser() {
   const { isMobile } = useSidebar()
-  const { user } = useUserStore();
 
   return (
     <SidebarMenu>
@@ -50,8 +48,8 @@ export default function NavUser() {
                 <AvatarFallback className="rounded-lg">CN</AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name}</span>
-                <span className="truncate text-xs">{user.email}</span>
+                <span className="truncate font-semibold">example</span>
+                <span className="truncate text-xs">example</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -69,8 +67,8 @@ export default function NavUser() {
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{user.name}</span>
-                  <span className="truncate text-xs">{user.email}</span>
+                  <span className="truncate font-semibold">example</span>
+                  <span className="truncate text-xs">example</span>
                 </div>
               </div>
             </DropdownMenuLabel>

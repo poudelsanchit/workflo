@@ -1,5 +1,6 @@
 "use client";
 
+import axios from "axios";
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import {
   Breadcrumb,
@@ -16,22 +17,28 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useSession } from "next-auth/react";
-import useUserStore from "../store/useStore"; // Import Zustand store
 import { useEffect } from "react";
+import useUserStore from "../store/userStore";
 
 export default function Page() {
   const { data: session, status } = useSession();
   const setUser = useUserStore((state) => state.setUser);
+  const user = useUserStore((state) => state.user);
 
   useEffect(() => {
-    if (session?.user && !useUserStore.getState().user.id) {
-      setUser({
-        id: session.user.id,
-        name: session.user.name,
-        email: session.user.email,
-      });
-    }
-  }, [session, setUser]); // Only run when session data changes
+    const fetchUserData = async () => {
+      if (session?.userId) {
+        try {
+          const response = await axios.get(`/api/user?userId=${session.userId}`);
+          setUser(response.data.user);
+        } catch (error) {
+          console.error("Failed to fetch user data:", error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [session, setUser]);
 
   return (
     <SidebarProvider>
@@ -44,9 +51,7 @@ export default function Page() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">
-                    Building Your Application
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
@@ -63,8 +68,16 @@ export default function Page() {
             <div className="aspect-video rounded-xl bg-muted/50" />
           </div>
           <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min">
-            Logged in as {session?.user?.name} <br />
-            {status}
+            {user ? (
+              <>
+                <h2>User Data:</h2>
+                <pre className="bg-gray-200 p-4 rounded-lg overflow-x-auto">
+                  {JSON.stringify(user, null, 2)}
+                </pre>
+              </>
+            ) : (
+              <p>Loading user data...</p>
+            )}
           </div>
         </div>
       </SidebarInset>
