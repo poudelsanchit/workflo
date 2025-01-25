@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { AppSidebar } from "@/components/sidebar/app-sidebar";
 import {
@@ -16,7 +16,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useSession } from "next-auth/react";
-import useUserStore from "../store/useStore";  // Import Zustand store
+import useUserStore from "../store/useStore"; // Import Zustand store
 import { useEffect } from "react";
 
 export default function Page() {

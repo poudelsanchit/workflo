@@ -1,10 +1,6 @@
-import mongoose, { Document, Model, Schema } from "mongoose";
+import mongoose, { Document, Schema, ObjectId } from "mongoose";
 
-export interface IPage {
-  id: string;
-  title: string;
-}
-
+// Define the User model interface
 export interface IUser extends Document {
   name: string;
   email: string;
@@ -12,11 +8,12 @@ export interface IUser extends Document {
   googleId: string;
   isActive: boolean;
   pages: {
-    private: IPage[]; // Array to store private pages with title and id
-    teamspace: IPage[]; // Array to store teamspace pages with title and id
+    private: { pageId: ObjectId; title: string }[]; // Array of references to private pages
+    teamspace: { pageId: ObjectId; title: string }[]; // Array of references to teamspace pages
   };
 }
 
+// User schema definition
 const UserSchema: Schema<IUser> = new mongoose.Schema(
   {
     name: {
@@ -44,24 +41,32 @@ const UserSchema: Schema<IUser> = new mongoose.Schema(
       default: true,
     },
     pages: {
-      private: {
-        type: [
-          {
-            id: { type: String, required: true },
-            title: { type: String, required: true },
+      private: [
+        {
+          pageId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "PrivatePage",
+            required: true,
           },
-        ],
-        default: [],
-      },
-      teamspace: {
-        type: [
-          {
-            id: { type: String, required: true },
-            title: { type: String, required: true },
+          title: {
+            type: String,
+            required: true,
           },
-        ],
-        default: [],
-      },
+        },
+      ],
+      teamspace: [
+        {
+          pageId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "TeamspacePage",
+            required: true,
+          },
+          title: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
     },
   },
   {
@@ -69,7 +74,6 @@ const UserSchema: Schema<IUser> = new mongoose.Schema(
   }
 );
 
-const UserModel: Model<IUser> =
-  mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+const UserModel = mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
 
 export default UserModel;
