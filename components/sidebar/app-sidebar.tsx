@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Settings, Trash, MessageCircleQuestion } from "lucide-react";
 
 import { NavMain } from "@/components/sidebar/nav-main";
 import { NavProjects } from "@/components/sidebar/nav-utilities";
@@ -16,56 +15,6 @@ import {
 import NavUser from "./nav-user";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // State to manage the navMain data
-  const navMainData = [
-    {
-      title: "Personal",
-      url: "#",
-      isActive: true,
-      tooltip: "Add a personal page",
-      items: [
-        {
-          title: "Untitled",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Teamspace",
-      url: "#",
-      isActive: false,
-      tooltip: "Add a teamspace page",
-      items: [
-        {
-          title: "Untitled",
-          url: "#",
-        },
-      ],
-    },
-  ]
-
-  const [projects] = React.useState([
-    {
-      name: "Settings",
-      url: "#",
-      icon: Settings,
-    },
-    {
-      name: "Trash",
-      url: "#",
-      icon: Trash,
-    },
-    {
-      name: "Help",
-      url: "#",
-      icon: MessageCircleQuestion,
-    },
-  ]);
-
-
-
-  
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -73,11 +22,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         {/* Pass data and handler to NavMain */}
-        <NavMain items={navMainData} />
-        <NavProjects projects={projects} />
+        <NavMain />
+        <NavProjects />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser  />
+        <NavUser />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

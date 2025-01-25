@@ -1,24 +1,21 @@
-// stores/userStore.ts
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 interface User {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   image: string;
   googleId: string;
   isActive: boolean;
-  pages: {
-    private: { pageId: string; title: string }[];
-    teamspace: { pageId: string; title: string }[];
-  };
+  pages: { [key: string]: { pageId: string; title: string }[] }; // Generic string categories
 }
 
 interface UserStore {
   user: User | null;
   setUser: (user: User) => void;
   clearUser: () => void;
+  addPage: (category: string, page: { pageId: string; title: string }) => void; // Allow any string category
 }
 
 const useUserStore = create<UserStore>()(
@@ -26,6 +23,19 @@ const useUserStore = create<UserStore>()(
     user: null,
     setUser: (user) => set({ user }),
     clearUser: () => set({ user: null }),
+    addPage: (category, page) => {
+      set((state) => {
+        if (state.user) {
+          const updatedPages = {
+            ...state.user.pages,
+            [category]: [...(state.user.pages[category] || []), page], // Add page to the specified category
+          };
+
+          return { user: { ...state.user, pages: updatedPages } };
+        }
+        return state;
+      });
+    },
   }))
 );
 
