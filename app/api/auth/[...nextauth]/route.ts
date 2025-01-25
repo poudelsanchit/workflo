@@ -29,25 +29,37 @@ const handler = NextAuth({
           picture: string;
         };
 
-        // Create or update the user in the database
-        const user = await UserModel.findOneAndUpdate(
-          { email }, // Find by email
-          {
+        // Find the user in the database
+        let user = await UserModel.findOne({ email });
+
+        if (user) {
+          // If the user exists, update their info
+          user.name = name;
+          user.image = picture;
+          user.googleId = account.providerAccountId;
+          user.isActive = true;
+        } else {
+          // If the user doesn't exist, create a new one
+          user = new UserModel({
             name,
             email,
             image: picture,
             googleId: account.providerAccountId,
-            isActive: true, // You can manage the isActive flag based on logic
+            isActive: true,
             pages: {
               private: [], // Initialize empty private pages array
               teamspace: [], // Initialize empty teamspace pages array
             },
-          },
-          { new: true, upsert: true } // Create the user if not found (upsert)
-        );
+          });
+        }
 
-        // Optionally attach user info to the token
-        token.userId = user._id; // Add user ID to the token
+        // Save the user and ensure we retain their previous pages info
+        await user.save();
+
+        // Attach user info and pages to the token
+        token.userId = user._id;
+        token.privatePages = user.pages.private;
+        token.teamspacePages = user.pages.teamspace;
       }
       return token;
     },
