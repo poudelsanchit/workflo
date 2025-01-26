@@ -21,7 +21,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        {/* Pass data and handler to NavMain */}
         <NavMain />
         <NavProjects />
       </SidebarContent>

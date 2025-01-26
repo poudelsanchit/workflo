@@ -33,6 +33,7 @@ import { Input } from "../ui/input";
 import { toast } from "sonner";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 export function NavMain() {
   const [shouldFetchUserData, setShouldFetchUserData] = useState(false);
@@ -51,7 +52,7 @@ export function NavMain() {
       isActive: true,
       items: privatePages?.map((page) => ({
         title: page.title,
-        url: `/private/${page.pageId}`,
+        url: `/app/${page.pageId}`,
       })),
     },
     {
@@ -64,8 +65,6 @@ export function NavMain() {
       })),
     },
   ];
-
-
 
   const handleCreateNewPage = (
     e: React.MouseEvent<HTMLDivElement>,
@@ -97,7 +96,6 @@ export function NavMain() {
         pageId: newPage._id, // Assuming the API returns the new page's ID
         title: newPage.title,
       });
-
       toast(`New page "${pageTitle}" created successfully!`);
       setIsDialogOpen(false);
       setPageTitle(""); // Reset the input field
@@ -169,9 +167,9 @@ export function NavMain() {
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.url}>
                         <SidebarMenuSubButton asChild>
-                          <a href={subItem.url}>
+                          <Link href={subItem.url}>
                             <span className="text-black">{subItem.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
