@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react";
+import { Plus, User, Users } from "lucide-react";
 import type React from "react";
 import { useEffect, useState } from "react";
 import {
@@ -49,6 +49,7 @@ export function NavMain() {
     {
       title: "Private",
       tooltip: "Add a private page",
+      icon: User,
       isActive: true,
       items: privatePages?.map((page) => ({
         title: page.title,
@@ -58,6 +59,7 @@ export function NavMain() {
     {
       title: "Teamspace ",
       tooltip: "Add a teamspace page",
+      icon: Users,
       isActive: true,
       items: teamspacePages?.map((page) => ({
         title: page.title,
@@ -140,6 +142,7 @@ export function NavMain() {
               <SidebarMenuItem className="group/sidebar-item">
                 <CollapsibleTrigger asChild>
                   <SidebarMenuButton tooltip={item.title}>
+                    {item.icon && <item.icon />}
                     <span className="text-gray-500 text-xs font-semibold">
                       {item.title}
                     </span>
@@ -176,6 +179,7 @@ export function NavMain() {
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenuItem>
+              
             </Collapsible>
           ))}
         </SidebarMenu>
