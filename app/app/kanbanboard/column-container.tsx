@@ -3,13 +3,16 @@ import { Column, Id } from "./types";
 import { Trash } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 
 interface Props {
   column: Column;
   deleteColumn: (id: Id) => void;
+  updateColumn: (id:Id,title: string)=>void;
 }
 export default function ColumnContainer(props: Props) {
-  const { column, deleteColumn } = props;
+  const { column, deleteColumn,updateColumn } = props;
+  const [editMode, setEditMode] = useState(false);
   const {
     setNodeRef,
     attributes,
@@ -31,25 +34,49 @@ export default function ColumnContainer(props: Props) {
   if (isDragging) {
     return (
       <div
-        className="border  rounded-md w-[300px] h-[500px] max-h-[500px] flex  flex-col font-semibold "
-        ref={setNodeRef}
-        style={style}
-      ></div>
+      className=" bg-[#f8f6f5]   rounded-2xl w-[350px] h-[500px] max-h-[500px] flex  flex-col font-semibold "
+      ref={setNodeRef}
+      style={style}
+    ></div>
     );
   }
   return (
     <div
-      className="border  rounded-md w-[300px] h-[500px] max-h-[500px] flex  flex-col font-semibold "
+      className=" bg-[#f8f6f5]  p-4  rounded-2xl w-[350px] h-[500px] max-h-[500px] flex  flex-col font-semibold "
       ref={setNodeRef}
       style={style}
     >
       {/* Column task title */}
       <div
-        className="p-2 border-b flex justify-between bg-[#eae6e6]"
+        className="  flex justify-between "
         {...attributes}
         {...listeners}
       >
-        <div> {column.title}</div>
+        <div
+          onClick={() => {
+            setEditMode(true);
+          }}
+          className="flex gap-2 text-sm font-semibold"
+        >
+          {!editMode && column.title}
+          {editMode && (
+            <input
+            className=" bg-[#eae6e6] focus:border-none focus:outline-none"
+              value={column.title}
+              onChange={(e) => updateColumn(column.id, e.target.value)}
+              autoFocus
+              onBlur={() => {
+                setEditMode(false);
+              }}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter") return;
+                setEditMode(false);
+              }}
+            />
+          )}
+          <div className="text-gray-500/80">10</div>
+           
+        </div>
         <div
           className=" p-1 rounded cursor-pointer hover:scale-[1.1] transition-all duration-500 "
           onClick={() => {
@@ -60,9 +87,9 @@ export default function ColumnContainer(props: Props) {
         </div>
       </div>
       {/* Column task container */}
-      <div className="flex flex-grow bg-white"></div>
+      <div className="flex flex-grow"></div>
       {/* Column footer */}
-      <Button className="p-2" variant={"darkBorderLess"}>
+      <Button className="p-2" variant={"outlineBorderLess"}>
         Add task
       </Button>
     </div>

@@ -16,14 +16,17 @@ import {
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 export default function KanbanBoard() {
-  const [columns, setColumn] = useState<Column[]>([]);
+  const [columns, setColumn] = useState<Column[]>([{ id: 1, title: "Progress" }]);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
+
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
-  const sensors = useSensors(useSensor(PointerSensor,{
-    activationConstraint: {
-      distance: 3,
-    }
-  }))
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 3,
+      },
+    })
+  );
   const handleAddColumn = () => {
     const columnToAdd: Column = {
       id: generateId(),
@@ -34,6 +37,13 @@ export default function KanbanBoard() {
   const handleDeleteColumn = (id: Id) => {
     const filteredColumns = columns.filter((col) => col.id !== id);
     setColumn(filteredColumns);
+  };
+  const handleUpdateColumn = (id: Id, title: string) => {
+    const newColumns = columns.map((col) => {
+      if (col.id !== id) return col;
+      return { ...col, title };
+    });
+    setColumn(newColumns);
   };
   function generateId() {
     return Math.floor(Math.random() * 1000);
@@ -60,12 +70,16 @@ export default function KanbanBoard() {
       const overColumnIndex = columns.findIndex(
         (col) => col.id === overColumnId
       );
-      return arrayMove(columns,activeColumnIndex,overColumnIndex);
+      return arrayMove(columns, activeColumnIndex, overColumnIndex);
     });
   }
   return (
     <div className="flex gap-3 items-center w-fulloverflow-x-auto overflow-y-hidden p-5">
-      <DndContext sensors={sensors} onDragStart={onDragStart} onDragEnd={onDragEnd}>
+      <DndContext
+        sensors={sensors}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+      >
         <div className="flex  gap-3">
           <SortableContext items={columnsId}>
             {columns.map((col) => {
@@ -73,6 +87,7 @@ export default function KanbanBoard() {
                 <ColumnContainer
                   column={col}
                   deleteColumn={handleDeleteColumn}
+                  updateColumn={handleUpdateColumn}
                   key={col.id}
                 />
               );
@@ -93,6 +108,7 @@ export default function KanbanBoard() {
               <ColumnContainer
                 column={activeColumn}
                 deleteColumn={handleDeleteColumn}
+                updateColumn={handleUpdateColumn}
               />
             )}
           </DragOverlay>,
