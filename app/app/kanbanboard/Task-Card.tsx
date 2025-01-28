@@ -43,34 +43,34 @@ export default function TaskContainer({ task, deleteTask, updateTask }: Props) {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // Adjust height dynamically
     }
   };
+  if (editMode) {
+    return (
+      <div className="flex flex-col gap-3 bg-white text-sm px-4 pr-8 pt-4 pb-3 rounded-xl shadow-sm cursor-pointer select-none w-full">
+        <textarea
+          ref={textareaRef}
+          className="rounded focus:border-none focus:outline-none resize-none text-sm w-full  pb-0"
+          value={tempContent}
+          onChange={handleChange}
+          autoFocus
+          onBlur={handleBlur}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              handleBlur();
+            }
+          }}
+        />
+      </div>
+    );
+  }
 
   return (
     <div
       className="flex flex-col gap-3 bg-white text-sm px-4 pt-4 pb-3 rounded-xl shadow-sm cursor-pointer select-none w-full"
-      key={task.id}
+      onClick={() => setEditMode(true)}
     >
       <div className="flex justify-between gap-2">
-        <div className="w-full" onClick={() => setEditMode(true)}>
-          {!editMode && (
-            <div className="break-words whitespace-pre-wrap ">
-              {task.content}
-            </div>
-          )}
-          {editMode && (
-            <textarea
-              ref={textareaRef}
-              className="rounded focus:border-none focus:outline-none resize-none text-sm w-full  pb-0"
-              value={tempContent}
-              onChange={handleChange}
-              autoFocus
-              onBlur={handleBlur}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !e.shiftKey) {
-                  handleBlur();
-                }
-              }}
-            />
-          )}
+        <div className="w-full">
+          <div className="break-words whitespace-pre-wrap ">{task.content}</div>
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
