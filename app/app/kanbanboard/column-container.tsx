@@ -1,17 +1,23 @@
 import { Button } from "@/components/ui/button";
-import { Column, Id } from "./types";
-import { Trash } from "lucide-react";
+import { Column, Id, Task } from "./types";
+import { MoreHorizontal, Plus, PlusIcon, Trash } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
+import TaskContainer from "./Task-Card";
 
 interface Props {
   column: Column;
   deleteColumn: (id: Id) => void;
-  updateColumn: (id:Id,title: string)=>void;
+  updateColumn: (id: Id, title: string) => void;
+  createTask: (columnId: Id) => void;
+  deleteTask: (id: Id) => void;
+  updateTask:(id:Id,column:string)=>void;
+  tasks: Task[];
 }
 export default function ColumnContainer(props: Props) {
-  const { column, deleteColumn,updateColumn } = props;
+  const { column, deleteColumn, updateColumn, createTask, deleteTask,updateTask ,tasks } =
+    props;
   const [editMode, setEditMode] = useState(false);
   const {
     setNodeRef,
@@ -34,10 +40,10 @@ export default function ColumnContainer(props: Props) {
   if (isDragging) {
     return (
       <div
-      className=" bg-[#f8f6f5]   rounded-2xl w-[350px] h-[500px] max-h-[500px] flex  flex-col font-semibold "
-      ref={setNodeRef}
-      style={style}
-    ></div>
+        className="  border  rounded-2xl w-[350px] h-[500px] max-h-[500px] flex  flex-col font-semibold "
+        ref={setNodeRef}
+        style={style}
+      ></div>
     );
   }
   return (
@@ -47,21 +53,20 @@ export default function ColumnContainer(props: Props) {
       style={style}
     >
       {/* Column task title */}
-      <div
-        className="  flex justify-between "
-        {...attributes}
-        {...listeners}
-      >
+      <div className="  flex justify-between ">
         <div
           onClick={() => {
             setEditMode(true);
           }}
-          className="flex gap-2 text-sm font-semibold"
+          {...attributes}
+          {...listeners}
+          className="flex gap-2 text-sm font-semibold  w-full"
         >
+          {/* <div className="text-gray-500/80">10</div> */}
           {!editMode && column.title}
           {editMode && (
             <input
-            className=" bg-[#eae6e6] focus:border-none focus:outline-none"
+              className=" rounded pl-2 focus:border-none focus:outline-none p-0 m-0 text-sm w-full"
               value={column.title}
               onChange={(e) => updateColumn(column.id, e.target.value)}
               autoFocus
@@ -74,8 +79,6 @@ export default function ColumnContainer(props: Props) {
               }}
             />
           )}
-          <div className="text-gray-500/80">10</div>
-           
         </div>
         <div
           className=" p-1 rounded cursor-pointer hover:scale-[1.1] transition-all duration-500 "
@@ -87,9 +90,19 @@ export default function ColumnContainer(props: Props) {
         </div>
       </div>
       {/* Column task container */}
-      <div className="flex flex-grow"></div>
+      <div className="flex flex-grow flex-col gap-2  pt-4">
+        {tasks.map((task) => (
+          <TaskContainer key={task.id} task={task} deleteTask={deleteTask}  updateTask={updateTask}/>
+        ))}
+      </div>
       {/* Column footer */}
-      <Button className="p-2" variant={"outlineBorderLess"}>
+      <Button
+        className="p-2"
+        variant={"outlineBorderLess"}
+        onClick={() => {
+          createTask(column.id);
+        }}
+      >
         Add task
       </Button>
     </div>

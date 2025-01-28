@@ -21,7 +21,7 @@ const buttonVariants = cva(
         dark: " bg-black text-white hover:bg-black/90",
         darkBorderLess: " bg-black text-white hover:bg-black/90 rounded-none",
         outlineBorderLess:
-        " bg-white shadow-sm hover:text-accent-foreground rounded-lg",
+        " bg-white shadow-lg hover:text-accent-foreground rounded-lg",
       },
       size: {
         default: "h-10 px-4 py-2",

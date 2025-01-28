@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { Column, Id } from "./types";
+import { Column, Id, Task } from "./types";
 import { useMemo, useState } from "react";
 import ColumnContainer from "./column-container";
 import {
@@ -16,7 +16,30 @@ import {
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 export default function KanbanBoard() {
-  const [columns, setColumn] = useState<Column[]>([{ id: 1, title: "Progress" }]);
+  const [columns, setColumn] = useState<Column[]>([
+    { id: 1, title: "Progress" },
+  ]);
+  const [tasks, setTasks] = useState<Task[]>([
+    {
+      columnId: 1,
+      content: "Complete the frontend part",
+      id: 1,
+      deadline: new Date(),
+    },
+    {
+      columnId: 1,
+      content: "Complete the Backend part",
+      id: 2,
+      deadline: new Date(),
+    },
+    {
+      columnId: 1,
+      content: "Integrate the frontend and the backend part",
+      id: 3,
+      deadline: new Date(),
+    },
+  ]);
+
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
@@ -44,6 +67,26 @@ export default function KanbanBoard() {
       return { ...col, title };
     });
     setColumn(newColumns);
+  };
+  const handleCreateTask = (columnId: Id) => {
+    const newTask: Task = {
+      id: generateId(),
+      columnId,
+      content: `Task ${tasks.length + 1}`,
+      deadline: new Date(),
+    };
+    setTasks([...tasks, newTask]);
+  };
+  const handleDeleteTask = (id: Id) => {
+    const newTask = tasks.filter((task) => task.id !== id);
+    setTasks(newTask);
+  };
+  const handleUpdateTask = (id: Id, content: string) => {
+    const newTasks = tasks.map((task) => {
+      if (task.id != id) return task;
+      return { ...task, content };
+    });
+    setTasks(newTasks);
   };
   function generateId() {
     return Math.floor(Math.random() * 1000);
@@ -86,8 +129,12 @@ export default function KanbanBoard() {
               return (
                 <ColumnContainer
                   column={col}
+                  tasks={tasks.filter((task) => task.columnId === col.id)}
                   deleteColumn={handleDeleteColumn}
                   updateColumn={handleUpdateColumn}
+                  createTask={handleCreateTask}
+                  deleteTask={handleDeleteTask}
+                  updateTask={handleUpdateTask}
                   key={col.id}
                 />
               );
@@ -107,8 +154,15 @@ export default function KanbanBoard() {
             {activeColumn && (
               <ColumnContainer
                 column={activeColumn}
+                tasks={tasks.filter(
+                  (task) => task.columnId === activeColumn.id
+                )}
                 deleteColumn={handleDeleteColumn}
                 updateColumn={handleUpdateColumn}
+                createTask={handleCreateTask}
+                deleteTask={handleDeleteTask}
+                updateTask={handleUpdateTask}
+                key={activeColumn.id}
               />
             )}
           </DragOverlay>,
