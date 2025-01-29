@@ -82,7 +82,7 @@ const Board = () => {
 
     const newColumn = {
       title: text.trim(),
-      column: text.toLowerCase(),
+      column: text.toLowerCase().trim(),
       color: "text-purple-700",
       columnId: generateColumnId(),
     };
