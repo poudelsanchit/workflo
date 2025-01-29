@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
-import { title } from "process";
 
 const DEFAULT_CARDS = [
   // BACKLOG
