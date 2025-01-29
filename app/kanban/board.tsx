@@ -130,7 +130,7 @@ export default function Board() {
             onDragStart={(e) => handleDragStart(e, c)}
             onDragEnd={handleDragEnd}
             onDragOver={(e) => handleDragOver(e, c)}
-            className={`flex-shrink-0 ${draggingColumn === c ? "bg-neutral-800/50" : ""}`}
+            className={`flex-shrink-0 `}
           >
             <Column
               title={c.title}
@@ -141,9 +141,9 @@ export default function Board() {
               isColumnDragging={isColumnDragging}
               handleColumnDragOver={handleDragOver}
             />
-            {overColumn === c && (
+            {/* {overColumn === c && (
               <ColumnDropIndicator columnId={c.columnId} />
-            )}
+            )} */}
           </div>
         );
       })}

@@ -113,7 +113,7 @@ export default function Column({
   const filteredCards = cards.filter((c: any) => c.column === column);
 
   return (
-    <div className="w-56 shrink-0">
+    <div className="w-56 shrink-0 h-full">
       <div className="mb-3 flex gap-3 items-center">
         <span className="rounded text-sm text-neutral-400">
           {filteredCards.length}
