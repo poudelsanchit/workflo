@@ -1,63 +1,168 @@
-'use client'
+"use client";
 import React, { useState } from "react";
 import { FiPlus, FiTrash } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { FaFire } from "react-icons/fa";
+import { title } from "process";
+
+const DEFAULT_CARDS = [
+  // BACKLOG
+  { title: "Look into render bug in dashboard", id: "1", column: "backlog" },
+  { title: "SOX compliance checklist", id: "2", column: "backlog" },
+  { title: "[SPIKE] Migrate to Azure", id: "3", column: "backlog" },
+  { title: "Document Notifications service", id: "4", column: "backlog" },
+  // TODO
+  {
+    title: "Research DB options for new microservice",
+    id: "5",
+    column: "todo",
+  },
+  { title: "Postmortem for outage", id: "6", column: "todo" },
+  { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
+
+  // DOING
+  {
+    title: "Refactor context providers to use Zustand",
+    id: "8",
+    column: "progress",
+  },
+  { title: "Add logging to daily CRON", id: "9", column: "doing" },
+  // DONE
+  {
+    title: "Set up DD dashboards for Lambda listener",
+    id: "10",
+    column: "complete",
+  },
+];
+const COLUMNS = [
+  {
+    title: "Backlog",
+    column: "backlog",
+    color: "text-neutral-500",
+    columnId: "01",
+  },
+  {
+    title: "TODO",
+    column: "todo",
+    color: "text-red-500",
+    columnId: "02",
+  },
+  {
+    title: "IN Progress",
+    column: "progress",
+    color: "text-blue-500",
+    columnId: "03",
+  },
+  {
+    title: "Complete",
+    column: "complete",
+    color: "text-green-500",
+    columnId: "04",
+  },
+];
 
 export default function Kanban() {
-    return (
+  return (
     <div className="h-screen w-full bg-neutral-900 text-neutral-50 font-semibold">
       <Board />
     </div>
   );
-};
+}
 
 const Board = () => {
   const [cards, setCards] = useState(DEFAULT_CARDS);
+  const [columns, setColumns] = useState(COLUMNS);
+
+  const [isAdding, setIsAdding] = useState(false);
+  const [text, setText] = useState("");
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+
+    if (!text.trim().length) return;
+
+    const newColumn = {
+      title: text.trim(),
+      column: text.toLowerCase(),
+      color: "text-purple-700",
+      columnId: generateColumnId(),
+    };
+
+    console.log(newColumn);
+    setColumns((col) => [...col, newColumn]);
+    setIsAdding(false);
+  };
+
+  const generateColumnId = () => {
+    return `col-${Math.floor(Math.random() * 100000)}`;
+  };
 
   return (
     <div className="flex h-full w-full gap-3 overflow-scroll p-12">
-      <Column
-        title="Backlog"
-        column="backlog"
-        headingColor="text-neutral-500"
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title="TODO"
-        column="todo"
-        headingColor="text-yellow-200"
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title="In progress"
-        column="doing"
-        headingColor="text-blue-200"
-        cards={cards}
-        setCards={setCards}
-      />
-      <Column
-        title="Complete"
-        column="done"
-        headingColor="text-emerald-200"
-        cards={cards}
-        setCards={setCards}
-      />
+      {columns.map((c) => {
+        return (
+          <Column
+            key={c.columnId}
+            title={c.title}
+            column={c.column}
+            headingColor={c.color}
+            cards={cards}
+            setCards={setCards}
+          />
+        );
+      })}
+
+      {/* Add column functionality */}
+      {!isAdding && (
+        <button
+          className="flex h-max min-w-max items-center gap-1.5 px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50 "
+          onClick={() => {
+            setIsAdding(true);
+          }}
+        >
+          <span>Add Column</span>
+          <FiPlus />
+        </button>
+      )}
+      {isAdding && (
+        <motion.form layout onClick={handleSubmit}>
+          <textarea
+            onChange={(e) => setText(e.target.value)}
+            autoFocus
+            placeholder="Add new Column..."
+            className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
+          />
+          <div className="mt-1.5 flex items-center justify-end gap-1.5">
+            <button
+              onClick={() => setIsAdding(false)}
+              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
+            >
+              <span>Add</span>
+              <FiPlus />
+            </button>
+          </div>
+        </motion.form>
+      )}
+
       <BurnBarrel setCards={setCards} />
     </div>
   );
 };
 
-const Column = ({ title, headingColor, cards, column, setCards }:any) => {
+const Column = ({ title, headingColor, cards, column, setCards }: any) => {
   const [active, setActive] = useState(false);
 
-  const handleDragStart = (e:any, card:any) => {
+  const handleDragStart = (e: any, card: any) => {
     e.dataTransfer.setData("cardId", card.id);
   };
 
-  const handleDragEnd = (e) => {
+  const handleDragEnd = (e: any) => {
     const cardId = e.dataTransfer.getData("cardId");
 
     setActive(false);
@@ -92,22 +197,21 @@ const Column = ({ title, headingColor, cards, column, setCards }:any) => {
     }
   };
 
-  const handleDragOver = (e:any) => {
+  const handleDragOver = (e: any) => {
     e.preventDefault();
     highlightIndicator(e);
 
     setActive(true);
   };
 
-  const clearHighlights = (els:any) => {
-    const indicators = els || getIndicators();
-
-    indicators.forEach((i:any) => {
+  const clearHighlights = (els: any = getIndicators()) => {
+    const indicators = els;
+    indicators.forEach((i: any) => {
       i.style.opacity = "0";
     });
   };
 
-  const highlightIndicator = (e:any) => {
+  const highlightIndicator = (e: any) => {
     const indicators = getIndicators();
 
     clearHighlights(indicators);
@@ -117,11 +221,11 @@ const Column = ({ title, headingColor, cards, column, setCards }:any) => {
     el.element.style.opacity = "1";
   };
 
-  const getNearestIndicator = (e:any, indicators:any) => {
+  const getNearestIndicator = (e: any, indicators: any) => {
     const DISTANCE_OFFSET = 50;
 
     const el = indicators.reduce(
-      (closest:any, child:any) => {
+      (closest: any, child: any) => {
         const box = child.getBoundingClientRect();
 
         const offset = e.clientY - (box.top + DISTANCE_OFFSET);
@@ -150,15 +254,15 @@ const Column = ({ title, headingColor, cards, column, setCards }:any) => {
     setActive(false);
   };
 
-  const filteredCards = cards.filter((c:any) => c.column === column);
+  const filteredCards = cards.filter((c: any) => c.column === column);
 
   return (
     <div className="w-56 shrink-0">
-      <div className="mb-3 flex items-center justify-between">
-        <h3 className={`font-medium ${headingColor}`}>{title}</h3>
+      <div className="mb-3 flex gap-3 items-center">
         <span className="rounded text-sm text-neutral-400">
           {filteredCards.length}
         </span>
+        <h3 className={`font-medium ${headingColor}`}>{title}</h3>
       </div>
       <div
         onDrop={handleDragEnd}
@@ -168,7 +272,7 @@ const Column = ({ title, headingColor, cards, column, setCards }:any) => {
           active ? "bg-neutral-800/50" : "bg-neutral-800/0"
         }`}
       >
-        {filteredCards.map((c:any) => {
+        {filteredCards.map((c: any) => {
           return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
         })}
         <DropIndicator beforeId={null} column={column} />
@@ -178,7 +282,7 @@ const Column = ({ title, headingColor, cards, column, setCards }:any) => {
   );
 };
 
-const Card = ({ title, id, column, handleDragStart }:any) => {
+const Card = ({ title, id, column, handleDragStart }: any) => {
   return (
     <>
       <DropIndicator beforeId={id} column={column} />
@@ -195,7 +299,7 @@ const Card = ({ title, id, column, handleDragStart }:any) => {
   );
 };
 
-const DropIndicator = ({ beforeId, column }:any) => {
+const DropIndicator = ({ beforeId, column }: any) => {
   return (
     <div
       data-before={beforeId || "-1"}
@@ -205,10 +309,10 @@ const DropIndicator = ({ beforeId, column }:any) => {
   );
 };
 
-const BurnBarrel = ({ setCards }:any) => {
+const BurnBarrel = ({ setCards }: any) => {
   const [active, setActive] = useState(false);
 
-  const handleDragOver = (e:any) => {
+  const handleDragOver = (e: any) => {
     e.preventDefault();
     setActive(true);
   };
@@ -217,10 +321,10 @@ const BurnBarrel = ({ setCards }:any) => {
     setActive(false);
   };
 
-  const handleDragEnd = (e:any) => {
+  const handleDragEnd = (e: any) => {
     const cardId = e.dataTransfer.getData("cardId");
 
-    setCards((pv:any) => pv.filter((c:any) => c.id !== cardId));
+    setCards((pv: any) => pv.filter((c: any) => c.id !== cardId));
 
     setActive(false);
   };
@@ -241,11 +345,11 @@ const BurnBarrel = ({ setCards }:any) => {
   );
 };
 
-const AddCard = ({ column, setCards }:any) => {
+const AddCard = ({ column, setCards }: any) => {
   const [text, setText] = useState("");
   const [adding, setAdding] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
 
     if (!text.trim().length) return;
@@ -256,7 +360,7 @@ const AddCard = ({ column, setCards }:any) => {
       id: Math.random().toString(),
     };
 
-    setCards((pv:any) => [...pv, newCard]);
+    setCards((pv: any) => [...pv, newCard]);
 
     setAdding(false);
   };
@@ -300,33 +404,3 @@ const AddCard = ({ column, setCards }:any) => {
     </>
   );
 };
-
-const DEFAULT_CARDS = [
-  // BACKLOG
-  { title: "Look into render bug in dashboard", id: "1", column: "backlog" },
-  { title: "SOX compliance checklist", id: "2", column: "backlog" },
-  { title: "[SPIKE] Migrate to Azure", id: "3", column: "backlog" },
-  { title: "Document Notifications service", id: "4", column: "backlog" },
-  // TODO
-  {
-    title: "Research DB options for new microservice",
-    id: "5",
-    column: "todo",
-  },
-  { title: "Postmortem for outage", id: "6", column: "todo" },
-  { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
-
-  // DOING
-  {
-    title: "Refactor context providers to use Zustand",
-    id: "8",
-    column: "doing",
-  },
-  { title: "Add logging to daily CRON", id: "9", column: "doing" },
-  // DONE
-  {
-    title: "Set up DD dashboards for Lambda listener",
-    id: "10",
-    column: "done",
-  },
-];
