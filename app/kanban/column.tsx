@@ -10,6 +10,7 @@ export default function Column({
   cards,
   column,
   setCards,
+  
 }: any) {
   const [active, setActive] = useState(false);
 

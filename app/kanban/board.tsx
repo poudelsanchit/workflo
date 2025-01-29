@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import BurnBarrel from "./burnbarrel";
 import Column from "./column";
+import ColumnDropIndicator from "./columnIndicator";
 
 const DEFAULT_CARDS = [
   // BACKLOG
@@ -18,7 +19,6 @@ const DEFAULT_CARDS = [
   },
   { title: "Postmortem for outage", id: "6", column: "todo" },
   { title: "Sync with product on Q3 roadmap", id: "7", column: "todo" },
-
   // DOING
   {
     title: "Refactor context providers to use Zustand",
@@ -33,6 +33,7 @@ const DEFAULT_CARDS = [
     column: "complete",
   },
 ];
+
 const COLUMNS = [
   {
     title: "Backlog",
@@ -59,6 +60,7 @@ const COLUMNS = [
     columnId: "04",
   },
 ];
+
 export default function Board() {
   const [cards, setCards] = useState(DEFAULT_CARDS);
   const [columns, setColumns] = useState(COLUMNS);
@@ -68,6 +70,7 @@ export default function Board() {
 
   const [draggingColumn, setDraggingColumn] = useState(null);
   const [overColumn, setOverColumn] = useState(null);
+  const [isColumnDragging, setIsColumnDragging] = useState(false);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -85,12 +88,14 @@ export default function Board() {
     setColumns((col) => [...col, newColumn]);
     setIsAdding(false);
   };
+
   const generateColumnId = () => {
     return `col-${Math.floor(Math.random() * 100000)}`;
   };
 
   const handleDragStart = (e: any, column: any) => {
     setDraggingColumn(column);
+    setIsColumnDragging(true);
   };
 
   const handleDragOver = (e: any, column: any) => {
@@ -112,11 +117,12 @@ export default function Board() {
       setDraggingColumn(null);
       setOverColumn(null);
     }
+    setIsColumnDragging(false);
   };
 
   return (
-    <div className="flex h-full w-full gap-3 overflow-scroll p-12">
-      {columns.map((c) => {
+    <div className="flex h-full w-full gap-3 overflow-scroll p-12 relative">
+      {columns.map((c, index) => {
         return (
           <div
             key={c.columnId}
@@ -132,7 +138,12 @@ export default function Board() {
               headingColor={c.color}
               cards={cards}
               setCards={setCards}
+              isColumnDragging={isColumnDragging}
+              handleColumnDragOver={handleDragOver}
             />
+            {overColumn === c && (
+              <ColumnDropIndicator columnId={c.columnId} />
+            )}
           </div>
         );
       })}
