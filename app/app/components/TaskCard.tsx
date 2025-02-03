@@ -3,7 +3,7 @@ import { Id, Task } from "@/types/types";
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { MoreHorizontal } from "lucide-react";
+import { Calendar, CalendarRange, MoreHorizontal } from "lucide-react";
 import { Separator } from "@radix-ui/react-separator";
 
 interface Props {
@@ -43,7 +43,7 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className=" opacity-50 task relative bg-[#131313] text-sm  p-2.5 h-20 min-h-max flex flex-col  pt-4 pb-2   rounded text-left cursor-grab"
+        className=" opacity-50 task relative bg-[#e2d9d9] text-sm  p-2.5 h-20 min-h-max flex flex-col  pt-4 pb-2   rounded text-left cursor-grab"
       />
     );
   }
@@ -81,14 +81,14 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
       onMouseLeave={() => {
         setMouseIsOver(false);
       }}
-      className=" task relative bg-[#131313] text-sm  p-2.5 h-18 min-h-max flex flex-col  pt-4 pb-2   rounded text-left cursor-grab"
+      className=" task bg-white  relative border-2 border-[#e8e8e8] shadow-sm text-black text-sm  p-2.5 h-18 min-h-max flex flex-col  pt-4 pb-2   rounded-md text-left cursor-grab"
     >
-      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-base text-neutral-100 pb-1">
+      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-base  pb-1">
         {task.content}
       </p>
 
       <div className=" absolute right-2 top-2 opacity-60 hover:opacity-100 cursor-pointer text-neutral-500">
-        <MoreHorizontal  size={18}/>
+        <MoreHorizontal size={18} />
       </div>
       {mouseIsOver && (
         <button
@@ -100,8 +100,9 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
           <BiTrash size={25} />
         </button>
       )}
-      <Separator className="bg-neutral-400/10 h-[1px] "/>
-      <p className="text-xs text-neutral-600 py-2">1st Jan, 2025</p>
+      <div className=" flex gap-1 items-center text-xs text-[#6a6a6a] py-2">
+        <CalendarRange  size={14}/>Jan 8, 2025
       </div>
+    </div>
   );
 }

@@ -53,7 +53,7 @@ export default function ColumnContainer(props: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className="bg-columnBackgroundColor w-[350px] h-[500px] max-h-[500px] rounded flex flex-col opacity-40 border-2 border-rose-500"
+        className=" w-[300px] h-[500px] max-h-[500px] rounded flex flex-col opacity-40 border-2  "
       ></div>
     );
   }
@@ -61,7 +61,7 @@ export default function ColumnContainer(props: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className=" w-[300px] h-[500px] max-h-[500px] rounded-md flex flex-col gap-2   p-3 shadow"
+      className=" w-[300px] h-[500px] max-h-[500px]  flex flex-col gap-2    p-3 pt-0   "
     >
       {/* Column Title */}
       <div
@@ -72,13 +72,12 @@ export default function ColumnContainer(props: Props) {
         {...listeners}
         className="  text-sm   cursor-grab flex items-center justify-between"
       >
-        <div className="flex items-center gap-2">
-          <div className="flex justify-center items-center bg-columnBackgroundColor py-1 text-sm rounded-full text-neutral-400">
-            0
-          </div>
-          <div className="text-purple-600 text-base">
-            {" "}
+        <div className="flex items-center  gap-2 w-full  pb-1 border-b-[3px]" style={{borderColor: column.color}}>
+          <div className="text-black text-base">
             {!editMode && column.title}
+          </div>
+          <div className="flex justify-center items-center py-1 text-sm rounded-full text-neutral-400">
+            {3}
           </div>
           <div>
             {editMode && (
