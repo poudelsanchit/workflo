@@ -43,7 +43,7 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className="opacity-30 task relative bg-[#0a0a0a] p-2.5 h-[100px] min-h-[100px] items-center flex rounded-xl text-left border-2 border-rose-700  cursor-grab"
+        className=" opacity-50 task relative bg-[#131313] text-sm  p-2.5 h-20 min-h-max flex flex-col  pt-4 pb-2   rounded text-left cursor-grab"
       />
     );
   }
@@ -81,9 +81,9 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
       onMouseLeave={() => {
         setMouseIsOver(false);
       }}
-      className=" task relative bg-[#0a0a0a] text-sm  p-2.5 h-18 min-h-14  flex flex-col   rounded text-left cursor-grab"
+      className=" task relative bg-[#131313] text-sm  p-2.5 h-18 min-h-max flex flex-col  pt-4 pb-2   rounded text-left cursor-grab"
     >
-      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-sm">
+      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-base text-neutral-100 pb-1">
         {task.content}
       </p>
 
@@ -100,12 +100,8 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
           <BiTrash size={25} />
         </button>
       )}
-      <div className="w-full h-[0.1px] bg-gray-500">
-      <Separator orientation="horizontal" className="h-1"/>
-
+      <Separator className="bg-neutral-400/10 h-[1px] "/>
+      <p className="text-xs text-neutral-600 py-2">1st Jan, 2025</p>
       </div>
-
-      <div className="text-xs  text-gray-600">Jan 1, 2026</div>
-    </div>
   );
 }

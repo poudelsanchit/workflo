@@ -61,7 +61,7 @@ export default function ColumnContainer(props: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className=" w-[300px] h-[500px] max-h-[500px] rounded-md flex flex-col  bg-[#131313] p-3 shadow"
+      className=" w-[300px] h-[500px] max-h-[500px] rounded-md flex flex-col gap-2   p-3 shadow"
     >
       {/* Column Title */}
       <div
@@ -126,7 +126,7 @@ export default function ColumnContainer(props: Props) {
         onClick={() => {
           createTask(column.id);
         }}
-        className="flex justify-center items-center text-sm text-neutral-400 hover:text-white transition-all duration-100 mr-auto pl-3"
+        className="flex justify-center items-center text-sm text-neutral-600 hover:text-neutral-300 transition-all duration-100 mr-auto pl-1 "
       >
         Add Task <BsPlus size={16} />
       </button>
