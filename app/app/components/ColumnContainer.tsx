@@ -13,12 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   column: Column;
   deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
-  createTask: (columnId: Id) => void;
+  createTask: (columnId: Id, newTask: string) => void;
   tasks: Task[];
   deleteTask: (id: Id) => void;
   updateTask: (id: Id, content: string) => void;
@@ -34,6 +35,8 @@ export default function ColumnContainer(props: Props) {
     updateTask,
   } = props;
   const [editMode, setEditMode] = useState(false);
+  const [isAddingTask, setIsAddingTask] = useState(false);
+  const [newTask, setNewTask] = useState("");
   const tasksIds = useMemo(() => {
     return tasks.map((task) => task.id);
   }, [tasks]);
@@ -146,16 +149,60 @@ export default function ColumnContainer(props: Props) {
           })}
         </SortableContext>
       </div>
-   
+      {isAddingTask && (
+        <div className="flex flex-col gap-2">
+          <textarea
+            autoFocus
+            placeholder="Add new task..."
+            className="w-full text-black rounded border border-purple-600 bg-violet-400/20 p-3 text-sm  placeholder-purple-600 focus:outline-0"
+            value={newTask}
+            onChange={(e) => {
+              setNewTask(e.target.value);
+            }}
+          />
+          <div className="flex ml-auto  gap-2">
+            <Button
+              variant={"outline"}
+              className="text-black h-8"
+              onClick={() => {
+                setIsAddingTask(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="h-8"
+              onClick={() => {
+                createTask(column.id, newTask);
+                setIsAddingTask(false);
+                setNewTask("");
+              }}
+            >
+              Create
+            </Button>
+          </div>
+        </div>
+      )}
 
-      <button
+      {!isAddingTask && (
+        <button
+          onClick={() => {
+            setIsAddingTask(true);
+          }}
+          className="flex justify-center items-center text-sm text-neutral-600 hover:text-neutral-300 transition-all duration-100 mr-auto pl-1 "
+        >
+          Add Task <BsPlus size={16} />
+        </button>
+      )}
+
+      {/* <button
         onClick={() => {
           createTask(column.id);
         }}
         className="flex justify-center items-center text-sm text-neutral-600 hover:text-neutral-300 transition-all duration-100 mr-auto pl-1 "
       >
         Add Task <BsPlus size={16} />
-      </button>
+      </button> */}
     </div>
   );
 }

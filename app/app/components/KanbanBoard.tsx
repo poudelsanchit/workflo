@@ -20,8 +20,8 @@ import { Plus } from "lucide-react";
 
 export default function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([
-    { id: 1, title: "Backlog",color:"#cc2929" },
-    { id: 2, title: "To Do",color:"#3f51b5" },
+    { id: 1, title: "Backlog", color: "#cc2929" },
+    { id: 2, title: "To Do", color: "#3f51b5" },
   ]);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
@@ -32,7 +32,6 @@ export default function KanbanBoard() {
     { id: 12334, columnId: 1, content: "Hold the reorder on mobile" },
     { id: 123234, columnId: 2, content: "Finish User Onboarding" },
     { id: 1233421, columnId: 2, content: "Hold the reorder on mobile" },
-
   ]);
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -121,11 +120,11 @@ export default function KanbanBoard() {
     });
     setColumns(newColumns);
   }
-  function createTask(columnId: Id) {
+  function createTask(columnId: Id, task: string) {
     const newTask: Task = {
       id: generateId(),
       columnId,
-      content: `Task ${tasks.length + 1}`,
+      content: task,
     };
     setTasks([...tasks, newTask]);
   }
