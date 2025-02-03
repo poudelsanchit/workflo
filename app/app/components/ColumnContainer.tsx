@@ -5,6 +5,12 @@ import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 import { BsPlus } from "react-icons/bs";
 import TaskCard from "./TaskCard";
+import { MoreHorizontal } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface Props {
   column: Column;
@@ -70,9 +76,10 @@ export default function ColumnContainer(props: Props) {
         }}
         {...attributes}
         {...listeners}
-        className="  text-sm   cursor-grab flex items-center justify-between"
+        className="  text-sm   cursor-grab flex items-center justify-between border-b-[3px]"
+        style={{ borderColor: column.color }}
       >
-        <div className="flex items-center  gap-2 w-full  pb-1 border-b-[3px]" style={{borderColor: column.color}}>
+        <div className="flex items-center  gap-2 w-full  pb-1 ">
           <div className="text-black text-base">
             {!editMode && column.title}
           </div>
@@ -97,14 +104,22 @@ export default function ColumnContainer(props: Props) {
             )}
           </div>
         </div>
-        <button
-          className="hidden"
-          onClick={() => {
-            deleteColumn(column.id);
-          }}
-        >
-          <BiTrash />
-        </button>
+        <Popover>
+          <PopoverTrigger>
+            <div className="cursor-pointer text-neutral-500">
+              <MoreHorizontal size={18} />
+            </div>
+          </PopoverTrigger>
+          <PopoverContent className="w-max h-10 cursor-pointer flex justify-center items-center">
+            <div
+              onClick={() => {
+                deleteColumn(column.id);
+              }}
+            >
+              Delete
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
       {/* Column task conrtainer */}
       <div className="flex flex-col gap-2  pt-2 ">
