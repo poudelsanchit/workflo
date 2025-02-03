@@ -72,8 +72,8 @@ export default function ColumnContainer(props: Props) {
         {...listeners}
         className="bg-mainBackgroundColor  text-sm   cursor-grab flex items-center justify-between"
       >
-        <div className="flex items-center gap-2">
-          <div className="flex justify-center items-center bg-columnBackgroundColor py-1 text-sm rounded-full">
+        <div className="flex items-center gap-3">
+          <div className="flex justify-center items-center bg-columnBackgroundColor py-1 text-sm rounded-full text-neutral-400">
             0
           </div>
           <div className="text-purple-600"> {!editMode && column.title}</div>
@@ -95,7 +95,7 @@ export default function ColumnContainer(props: Props) {
             )}
           </div>
         </div>
-        <button
+        <button className="hidden"
           onClick={() => {
             deleteColumn(column.id);
           }}
@@ -104,7 +104,7 @@ export default function ColumnContainer(props: Props) {
         </button>
       </div>
       {/* Column task conrtainer */}
-      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
+      <div className="flex flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => {
             return (
@@ -122,9 +122,9 @@ export default function ColumnContainer(props: Props) {
         onClick={() => {
           createTask(column.id);
         }}
-        className="flex gap-2 items-center justify-center border-columnBackgroundColor border-2 rounded p-4 border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-rose-500 bg-black"
+        className="flex justify-center items-center text-xs text-gray-500 hover:text-white transition-all duration-100 mr-auto pl-3"
       >
-        <BsPlus /> Add Task
+         Add Task <BsPlus  size={16}/>
       </button>
     </div>
   );
