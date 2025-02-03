@@ -1,4 +1,4 @@
-import Board from "@/app/kanban/board";
+import KanbanBoard from "../components/KanbanBoard";
 
 export default function DynamicPrivatePage({
   params,
@@ -6,8 +6,6 @@ export default function DynamicPrivatePage({
   params: { id: string };
 }) {
   return (
-    <div className="h-screen w-full bg-[#111111] text-neutral-50 font-semibold">
-      <Board />
-    </div>
+    <KanbanBoard/>
   );
 }
