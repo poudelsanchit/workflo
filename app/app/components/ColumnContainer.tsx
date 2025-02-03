@@ -1,4 +1,3 @@
-import { BiTrash } from "react-icons/bi";
 import { Column, Id, Task } from "@/types/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -6,11 +5,6 @@ import { useMemo, useState } from "react";
 import { BsPlus } from "react-icons/bs";
 import TaskCard from "./TaskCard";
 import { MoreHorizontal } from "lucide-react";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -152,6 +146,8 @@ export default function ColumnContainer(props: Props) {
           })}
         </SortableContext>
       </div>
+   
+
       <button
         onClick={() => {
           createTask(column.id);
