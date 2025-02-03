@@ -61,7 +61,7 @@ export default function ColumnContainer(props: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className="bg-columnBackgroundColor w-[350px] h-[500px] max-h-[500px] rounded flex flex-col"
+      className=" w-[300px] h-[500px] max-h-[500px] rounded flex flex-col"
     >
       {/* Column Title */}
       <div
@@ -70,15 +70,14 @@ export default function ColumnContainer(props: Props) {
         }}
         {...attributes}
         {...listeners}
-        className="bg-mainBackgroundColor text-md  h-[60px] cursor-grab rounded-md rounded-b-none p-3 font-bold border-columnBackgroundColor border-4 flex items-center justify-between"
+        className="bg-mainBackgroundColor  text-sm   cursor-grab flex items-center justify-between"
       >
-        <div className="flex gap-2">
+        <div className="flex items-center gap-2">
           <div className="flex justify-center items-center bg-columnBackgroundColor py-1 text-sm rounded-full">
             0
           </div>
-          <div> {!editMode && column.title}</div>
+          <div className="text-purple-600"> {!editMode && column.title}</div>
           <div>
-            {" "}
             {editMode && (
               <input
                 className="bg-black focus:border-rose-500 border rounded outline px-2"

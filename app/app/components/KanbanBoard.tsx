@@ -19,7 +19,7 @@ import TaskCard from "./TaskCard";
 
 export default function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([
-    { id: 1, title: "Finish the UI part" },
+    { id: 1, title: "Backlog" },
   ]);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
@@ -33,15 +33,14 @@ export default function KanbanBoard() {
   );
 
   return (
-    <div className="flex  bg-[#111111] text-neutral-50 font-semibold">
+    <div className="flex h-full w-full gap-3 overflow-scroll p-12 relative">
       <DndContext
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
         sensors={sensors}
       >
-        <div className="m-auto flex gap-4">
-          <div className="flex gap-2">
+          <div className="flex gap-2 ">
             <SortableContext items={columnsId}>
               {columns.map((column) => (
                 <ColumnContainer
@@ -57,10 +56,9 @@ export default function KanbanBoard() {
               ))}
             </SortableContext>
           </div>
-          <button onClick={createNewColumn} className=" cursor-pointer ">
-            <BiPlus /> Add Column
+          <button onClick={createNewColumn} className=" cursor-pointer mb-auto bg-red-400 min-w-max ">
+             Add Column
           </button>
-        </div>
         {createPortal(
           <DragOverlay>
             {activeColumn && (
