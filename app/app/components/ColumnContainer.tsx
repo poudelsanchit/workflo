@@ -61,7 +61,7 @@ export default function ColumnContainer(props: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className=" w-[300px] h-[500px] max-h-[500px] rounded flex flex-col"
+      className=" w-[300px] h-[500px] max-h-[500px] rounded-md flex flex-col  bg-[#131313] p-3 shadow"
     >
       {/* Column Title */}
       <div
@@ -70,13 +70,16 @@ export default function ColumnContainer(props: Props) {
         }}
         {...attributes}
         {...listeners}
-        className="bg-mainBackgroundColor  text-sm   cursor-grab flex items-center justify-between"
+        className="  text-sm   cursor-grab flex items-center justify-between"
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <div className="flex justify-center items-center bg-columnBackgroundColor py-1 text-sm rounded-full text-neutral-400">
             0
           </div>
-          <div className="text-purple-600"> {!editMode && column.title}</div>
+          <div className="text-purple-600 text-base">
+            {" "}
+            {!editMode && column.title}
+          </div>
           <div>
             {editMode && (
               <input
@@ -95,7 +98,8 @@ export default function ColumnContainer(props: Props) {
             )}
           </div>
         </div>
-        <button className="hidden"
+        <button
+          className="hidden"
           onClick={() => {
             deleteColumn(column.id);
           }}
@@ -104,7 +108,7 @@ export default function ColumnContainer(props: Props) {
         </button>
       </div>
       {/* Column task conrtainer */}
-      <div className="flex flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
+      <div className="flex flex-col gap-2  pt-2 ">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => {
             return (
@@ -122,9 +126,9 @@ export default function ColumnContainer(props: Props) {
         onClick={() => {
           createTask(column.id);
         }}
-        className="flex justify-center items-center text-xs text-gray-500 hover:text-white transition-all duration-100 mr-auto pl-3"
+        className="flex justify-center items-center text-sm text-neutral-400 hover:text-white transition-all duration-100 mr-auto pl-3"
       >
-         Add Task <BsPlus  size={16}/>
+        Add Task <BsPlus size={16} />
       </button>
     </div>
   );

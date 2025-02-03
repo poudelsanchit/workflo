@@ -1,8 +1,10 @@
 import { BiTrash } from "react-icons/bi";
-import {  Id, Task } from "@/types/types";
+import { Id, Task } from "@/types/types";
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { MoreHorizontal } from "lucide-react";
+import { Separator } from "@radix-ui/react-separator";
 
 interface Props {
   task: Task;
@@ -41,7 +43,7 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className="opacity-30 task relative bg-mainBackgroundColor p-2.5 h-[100px] min-h-[100px] items-center flex rounded-xl text-left border-2 border-rose-700  cursor-grab"
+        className="opacity-30 task relative bg-[#0a0a0a] p-2.5 h-[100px] min-h-[100px] items-center flex rounded-xl text-left border-2 border-rose-700  cursor-grab"
       />
     );
   }
@@ -79,21 +81,31 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
       onMouseLeave={() => {
         setMouseIsOver(false);
       }}
-      className=" task relative bg-mainBackgroundColor p-2.5 h-[100px] min-h-[100px] items-center flex rounded-xl text-left hover:ring-2 hover:ring-inset hover:ring-rose-500 cursor-grab"
+      className=" task relative bg-[#0a0a0a] text-sm  p-2.5 h-18 min-h-14  flex flex-col   rounded text-left cursor-grab"
     >
-      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-sm">
         {task.content}
       </p>
+
+      <div className=" absolute right-2 top-2 opacity-60 hover:opacity-100 cursor-pointer text-neutral-500">
+        <MoreHorizontal  size={18}/>
+      </div>
       {mouseIsOver && (
         <button
           onClick={() => {
             deleteTask(task.id);
           }}
-          className=" absolute right-4 top-1/2 -translate-y-1/2 opacity-60 hover:opacity-100"
+          className=" absolute right-2 top-1/2 -translate-y-1/2 opacity-60 hover:opacity-100 hidden"
         >
           <BiTrash size={25} />
         </button>
       )}
+      <div className="w-full h-[0.1px] bg-gray-500">
+      <Separator orientation="horizontal" className="h-1"/>
+
+      </div>
+
+      <div className="text-xs  text-gray-600">Jan 1, 2026</div>
     </div>
   );
 }

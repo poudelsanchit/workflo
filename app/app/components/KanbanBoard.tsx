@@ -16,6 +16,7 @@ import {
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "./TaskCard";
+import { Plus } from "lucide-react";
 
 export default function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>([
@@ -40,25 +41,28 @@ export default function KanbanBoard() {
         onDragOver={onDragOver}
         sensors={sensors}
       >
-          <div className="flex gap-2 ">
-            <SortableContext items={columnsId}>
-              {columns.map((column) => (
-                <ColumnContainer
-                  key={column.id}
-                  column={column}
-                  deleteColumn={deleteColumn}
-                  updateColumn={updateColumn}
-                  createTask={createTask}
-                  deleteTask={deleteTask}
-                  updateTask={updateTask}
-                  tasks={tasks.filter((task) => task.columnId === column.id)}
-                />
-              ))}
-            </SortableContext>
-          </div>
-          <button onClick={createNewColumn} className=" cursor-pointer mb-auto bg-red-400 min-w-max ">
-             Add Column
-          </button>
+        <div className="flex gap-2 ">
+          <SortableContext items={columnsId}>
+            {columns.map((column) => (
+              <ColumnContainer
+                key={column.id}
+                column={column}
+                deleteColumn={deleteColumn}
+                updateColumn={updateColumn}
+                createTask={createTask}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
+                tasks={tasks.filter((task) => task.columnId === column.id)}
+              />
+            ))}
+          </SortableContext>
+        </div>
+        <button
+          onClick={createNewColumn}
+          className="  flex justify-center items-center gap-1 text-sm cursor-pointer mb-auto  min-w-max  text-neutral-400"
+        >
+          Add Column <Plus size={18} />
+        </button>
         {createPortal(
           <DragOverlay>
             {activeColumn && (

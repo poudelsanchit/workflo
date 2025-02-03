@@ -6,7 +6,7 @@ export default function DynamicPrivatePage({
   params: { id: string };
 }) {
   return (
-    <div className="h-screen w-full bg-[#111111] text-neutral-50 font-semibold">
+    <div className="h-screen w-full  bg-[#0f0e0e] text-neutral-50 font-semibold">
       <KanbanBoard />
     </div>
   );
