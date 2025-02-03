@@ -1,3 +1,4 @@
+'use client'
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { FiPlus } from "react-icons/fi";
@@ -13,7 +14,7 @@ const DEFAULT_CARDS = [
   { title: "Document Notifications service", id: "4", column: "backlog" },
   // TODO
   {
-    title: "Research DB options for new microservice",
+    title: "Research DB options for new microservice with preparations of project proposal with all of usecases",
     id: "5",
     column: "todo",
   },
@@ -130,7 +131,7 @@ export default function Board() {
             onDragStart={(e) => handleDragStart(e, c)}
             onDragEnd={handleDragEnd}
             onDragOver={(e) => handleDragOver(e, c)}
-            className={`flex-shrink-0 `}
+            className={`flex-shrink-0 h-max`}
           >
             <Column
               title={c.title}
@@ -186,7 +187,7 @@ export default function Board() {
         </motion.form>
       )}
 
-      <BurnBarrel setCards={setCards} />
+      {/* <BurnBarrel setCards={setCards} /> */}
     </div>
   );
 }

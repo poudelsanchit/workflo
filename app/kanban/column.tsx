@@ -3,6 +3,7 @@ import { useState } from "react";
 import DropIndicator from "./dropindicator";
 import Card from "./card";
 import AddCard from "./addcard";
+import { motion } from "framer-motion";
 
 export default function Column({
   title,
@@ -10,7 +11,6 @@ export default function Column({
   cards,
   column,
   setCards,
-  
 }: any) {
   const [active, setActive] = useState(false);
 
@@ -55,12 +55,10 @@ export default function Column({
   const handleDragOver = (e: any) => {
     e.preventDefault();
     highlightIndicator(e);
-    setActive(true);
   };
- 
+
   const handleDragLeave = () => {
     clearHighlights();
-    setActive(false);
   };
 
   const clearHighlights = (els: any = getIndicators()) => {
@@ -108,12 +106,10 @@ export default function Column({
     return Array.from(document.querySelectorAll(`[data-column="${column}"]`));
   };
 
- 
-
   const filteredCards = cards.filter((c: any) => c.column === column);
 
   return (
-    <div className="w-56 shrink-0 h-full">
+    <div className="w-72 shrink-0 h-max   " >
       <div className="mb-3 flex gap-3 items-center">
         <span className="rounded text-sm text-neutral-400">
           {filteredCards.length}
@@ -124,9 +120,7 @@ export default function Column({
         onDrop={handleDragEnd}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
-        className={`h-full w-full transition-colors ${
-          active ? "bg-neutral-800/50" : "bg-neutral-800/0"
-        }`}
+        className={`h-full w-full transition-colors  bg-neutral-800/0`}
       >
         {filteredCards.map((c: any) => {
           return <Card key={c.id} {...c} handleDragStart={handleDragStart} />;
