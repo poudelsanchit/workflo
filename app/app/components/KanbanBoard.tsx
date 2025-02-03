@@ -66,7 +66,7 @@ export default function KanbanBoard() {
         </div>
         <button
           onClick={createNewColumn}
-          className="  flex justify-center items-center gap-1 text-sm cursor-pointer mb-auto  min-w-max  text-neutral-400"
+          className="  flex justify-center items-center gap-1 text-sm  text-neutral-600 cursor-pointer mb-auto  min-w-max  "
         >
           Add Column <Plus size={18} />
         </button>

@@ -11,6 +11,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface Props {
   column: Column;
@@ -71,16 +79,18 @@ export default function ColumnContainer(props: Props) {
     >
       {/* Column Title */}
       <div
-        onClick={() => {
-          setEditMode(true);
-        }}
         {...attributes}
         {...listeners}
         className="  text-sm   cursor-grab flex items-center justify-between border-b-[3px]"
         style={{ borderColor: column.color }}
       >
         <div className="flex items-center  gap-2 w-full  pb-1 ">
-          <div className="text-black text-base">
+          <div
+            className="text-black text-base"
+            onClick={() => {
+              setEditMode(true);
+            }}
+          >
             {!editMode && column.title}
           </div>
           <div className="flex justify-center items-center py-1 text-sm rounded-full text-neutral-400">
@@ -89,10 +99,10 @@ export default function ColumnContainer(props: Props) {
           <div>
             {editMode && (
               <input
-                className="bg-black focus:border-rose-500 border rounded outline px-2"
+                autoFocus
+                className=" text-black focus:outline-none text-base border rounded "
                 value={column.title}
                 onChange={(e) => updateColumn(column.id, e.target.value)}
-                autoFocus
                 onBlur={() => {
                   setEditMode(false);
                 }}
@@ -104,22 +114,28 @@ export default function ColumnContainer(props: Props) {
             )}
           </div>
         </div>
-        <Popover>
-          <PopoverTrigger>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger>
             <div className="cursor-pointer text-neutral-500">
               <MoreHorizontal size={18} />
             </div>
-          </PopoverTrigger>
-          <PopoverContent className="w-max h-10 cursor-pointer flex justify-center items-center">
-            <div
-              onClick={() => {
-                deleteColumn(column.id);
-              }}
-            >
-              Delete
-            </div>
-          </PopoverContent>
-        </Popover>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>
+              <div
+                onClick={() => {
+                  deleteColumn(column.id);
+                }}
+              >
+                Delete
+              </div>
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setEditMode(true)}>
+              Rename
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       {/* Column task conrtainer */}
       <div className="flex flex-col gap-2  pt-2 ">
