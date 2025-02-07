@@ -37,6 +37,7 @@ import Link from "next/link";
 
 export function NavMain() {
   const [shouldFetchUserData, setShouldFetchUserData] = useState(false);
+  const [loading, setLoading] = useState(true);
   const { data: session } = useSession();
   const setUser = useUserStore((state) => state.setUser);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -45,6 +46,7 @@ export function NavMain() {
   const userId = useUserStore((state) => state.user?._id);
   const privatePages = useUserStore((state) => state.user?.pages.private);
   const teamspacePages = useUserStore((state) => state.user?.pages.teamspace);
+
   const items = [
     {
       title: "Private",
@@ -95,15 +97,16 @@ export function NavMain() {
 
       // Update the store with the new page
       useUserStore.getState().addPage(currentItemTitle, {
-        pageId: newPage._id, // Assuming the API returns the new page's ID
+        pageId: newPage._id,
         title: newPage.title,
       });
+
       toast(`New page "${pageTitle}" created successfully!`);
       setIsDialogOpen(false);
-      setPageTitle(""); // Reset the input field
+      setPageTitle("");
 
       // Trigger re-fetch of user data
-      setShouldFetchUserData(true); // Set state to trigger the useEffect
+      setShouldFetchUserData(true);
     } catch (error) {
       toast("Error creating the page");
       console.error(error);
@@ -113,15 +116,16 @@ export function NavMain() {
   useEffect(() => {
     const fetchUserData = async () => {
       if (session?.userId) {
+        setLoading(true); // Start loading
         try {
           const response = await axios.get(
             `/api/user?userId=${session.userId}`
           );
           setUser(response.data.user);
-          setShouldFetchUserData(false); // Set state to trigger the useEffect
         } catch (error) {
           console.error("Failed to fetch user data:", error);
         }
+        setLoading(false); // Stop loading
       }
     };
 
@@ -167,19 +171,24 @@ export function NavMain() {
                 </CollapsibleTrigger>
                 <CollapsibleContent className="font-semibold text-black">
                   <SidebarMenuSub>
-                    {item.items?.map((subItem) => (
-                      <SidebarMenuSubItem key={subItem.url}>
-                        <SidebarMenuSubButton asChild>
-                          <Link href={subItem.url}>
-                            <span className="text-black">{subItem.title}</span>
-                          </Link>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
+                    {loading && (
+                      <div className="bg-gray-200 animate-pulse h-5 pl-3 rounded-sm"></div>
+                    )}
+                    {!loading &&
+                      item.items?.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.url}>
+                          <SidebarMenuSubButton asChild>
+                            <Link href={subItem.url}>
+                              <span className="text-black">
+                                {subItem.title}
+                              </span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
                   </SidebarMenuSub>
                 </CollapsibleContent>
               </SidebarMenuItem>
-              
             </Collapsible>
           ))}
         </SidebarMenu>
