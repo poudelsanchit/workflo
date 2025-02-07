@@ -1,7 +1,5 @@
-import { useEffect, useState } from "react";
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
