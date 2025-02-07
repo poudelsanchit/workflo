@@ -1,6 +1,5 @@
 "use client";
 import { useMemo, useState } from "react";
-import { BiPlus } from "react-icons/bi";
 import { Column, Id, Task } from "@/types/types";
 import ColumnContainer from "./ColumnContainer";
 import {
