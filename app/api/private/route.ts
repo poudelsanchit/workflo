@@ -4,7 +4,7 @@ import {  NextResponse } from "next/server";
 import dbConnect from "@/lib/db"; // Your database connection logic
 import UserModel from "@/models/user"; // Import UserModel
 import { PrivatePageModel } from "@/models/privatepage";
-s
+
 // Handle POST requests (creating a new page)
 export async function POST(req: Request) {
   await dbConnect(); // Ensure DB connection
