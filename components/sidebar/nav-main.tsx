@@ -9,16 +9,11 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import axios from "axios";
-import { useSession } from "next-auth/react";
 import { UserPages } from "./app-sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@radix-ui/react-collapsible";
+
 import { ChevronRight, User } from "lucide-react";
 import Link from "next/link";
+import { Collapsible,CollapsibleContent,CollapsibleTrigger } from "../ui/collapsible";
 interface NavMainProps {
   pages?: UserPages; 
 }
@@ -26,12 +21,13 @@ export function NavMain({ pages }: NavMainProps) {
   console.log(pages);
   return (
     <SidebarGroup>
-      <SidebarMenu className="text-sm">
+      <SidebarMenu className="text-sm font-semibold">
+        <motion.div></motion.div>
         <Collapsible asChild defaultOpen={true} className="group/collapsible">
           {/* Private Section */}
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip={"Private Page"}>
+              <SidebarMenuButton tooltip={"Private Page"} className="dark:text-gray-400">
                 <User />
                 <span>Private</span>
                 <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -57,7 +53,7 @@ export function NavMain({ pages }: NavMainProps) {
         <Collapsible asChild defaultOpen={true} className="group/collapsible">
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip={"Private Page"}>
+              <SidebarMenuButton tooltip={"Teamspace"}  className="dark:text-gray-400">
                 <User />
                 <span>Teamspace</span>
                 <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
