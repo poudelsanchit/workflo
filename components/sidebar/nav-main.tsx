@@ -26,7 +26,6 @@ export function NavMain({ pages }: NavMainProps) {
   console.log(pages);
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         <Collapsible asChild defaultOpen={true} className="group/collapsible">
           {/* Private Section */}
