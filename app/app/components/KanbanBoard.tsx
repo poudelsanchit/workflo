@@ -17,22 +17,17 @@ import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "./TaskCard";
 import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function KanbanBoard() {
-  const [columns, setColumns] = useState<Column[]>([
-    { id: 1, title: "Backlog", color: "#cc2929" },
-    { id: 2, title: "To Do", color: "#3f51b5" },
-  ]);
+  const [isAddingColumn, setisAddingColumn] = useState(false);
+  const [newColumnTitle, setNewColumnTitle] = useState("");
+  const [columns, setColumns] = useState<Column[]>([]);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
-  const [tasks, setTasks] = useState<Task[]>([
-    { id: 123, columnId: 1, content: "Finish User Onboarding" },
-    { id: 12334, columnId: 1, content: "Hold the reorder on mobile" },
-    { id: 123234, columnId: 2, content: "Finish User Onboarding" },
-    { id: 1233421, columnId: 2, content: "Hold the reorder on mobile" },
-  ]);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 3 },
@@ -62,13 +57,48 @@ export default function KanbanBoard() {
               />
             ))}
           </SortableContext>
+          {isAddingColumn && (
+            <div className="flex flex-col gap-2">
+              <textarea
+                autoFocus
+                placeholder="Add new Column..."
+                className="w-full text-black rounded border border-black bg-black/10 p-3 text-sm  placeholder-black focus:outline-0"
+                value={newColumnTitle}
+                onChange={(e) => {
+                  setNewColumnTitle(e.target.value);
+                }}
+              />
+              <div className="flex ml-auto  gap-2">
+                <Button
+                  variant={"outline"}
+                  className="text-black h-8"
+                  onClick={() => {
+                    setisAddingColumn(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="h-8 bg-black hover:bg-black/80"
+                  onClick={createNewColumn}
+                >
+                  Create
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
-        <button
-          onClick={createNewColumn}
-          className="  flex justify-center items-center gap-1 text-sm  text-neutral-600 cursor-pointer mb-auto  min-w-max  "
-        >
-          Add Column <Plus size={18} />
-        </button>
+        {!isAddingColumn && (
+          <Button
+            onClick={() => {
+              setisAddingColumn(true);
+            }}
+            className="  flex justify-center items-center gap-1 text-sm  text-neutral-50 cursor-pointer mb-auto  min-w-max bg-black hover:bg-black/80  "
+          >
+            Add a Column <Plus size={18} />
+          </Button>
+        )}
+
         {createPortal(
           <DragOverlay>
             {activeColumn && (
@@ -100,9 +130,11 @@ export default function KanbanBoard() {
   function createNewColumn() {
     const columnToAdd: Column = {
       id: generateId(),
-      title: `Column ${columns.length + 1}`,
+      title: newColumnTitle,
     };
     setColumns([...columns, columnToAdd]);
+    setisAddingColumn(false);
+    setNewColumnTitle("");
   }
   function generateId() {
     return Math.floor(Math.random() * 10000);
