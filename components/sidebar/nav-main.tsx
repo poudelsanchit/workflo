@@ -22,7 +22,6 @@ export function NavMain({ pages }: NavMainProps) {
   return (
     <SidebarGroup>
       <SidebarMenu className="text-sm font-semibold">
-        <motion.div></motion.div>
         <Collapsible asChild defaultOpen={true} className="group/collapsible">
           {/* Private Section */}
           <SidebarMenuItem>
