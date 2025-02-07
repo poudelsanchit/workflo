@@ -29,6 +29,7 @@ export function NavMain({ pages }: NavMainProps) {
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         <Collapsible asChild defaultOpen={true} className="group/collapsible">
+          {/* Private Section */}
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
               <SidebarMenuButton tooltip={"Private Page"}>
@@ -42,7 +43,7 @@ export function NavMain({ pages }: NavMainProps) {
                 {pages?.private.map((page) => (
                   <SidebarMenuSubItem key={page.title}>
                     <SidebarMenuSubButton asChild>
-                      <Link href={`/app/${page._id}`}>
+                      <Link href={`/app/${page.pageId}`}>
                         <span>{page.title}</span>
                       </Link>
                     </SidebarMenuSubButton>
@@ -52,6 +53,34 @@ export function NavMain({ pages }: NavMainProps) {
             </CollapsibleContent>
           </SidebarMenuItem>
         </Collapsible>
+
+        {/* Teamspace Section */}
+        <Collapsible asChild defaultOpen={true} className="group/collapsible">
+          <SidebarMenuItem>
+            <CollapsibleTrigger asChild>
+              <SidebarMenuButton tooltip={"Private Page"}>
+                <User />
+                <span>Teamspace</span>
+                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+              </SidebarMenuButton>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenuSub>
+                {pages?.teamspace.map((page) => (
+                  <SidebarMenuSubItem key={page.title}>
+                    <SidebarMenuSubButton asChild>
+                      <Link href={`/app/${page.pageId}`}>
+                        <span>{page.title}</span>
+                      </Link>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            </CollapsibleContent>
+          </SidebarMenuItem>
+        </Collapsible>
+
+
       </SidebarMenu>
     </SidebarGroup>
   );
