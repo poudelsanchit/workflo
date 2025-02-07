@@ -24,10 +24,18 @@ import {
 } from "@/components/ui/sidebar";
 import { signOut } from "next-auth/react";
 import useUserStore from "@/app/store/userStore";
+interface UserInfo {
+  name?: string;
+  email?: string;
+  image?: string;
+}
 
-export default function NavUser() {
+interface NavUserProps {
+  user?: UserInfo;
+}
+export function NavUser({ user }: NavUserProps) {
+  console.log(user)
   const { isMobile } = useSidebar();
-  const user = useUserStore((state) => state.user);
 
   return (
     <SidebarMenu>
