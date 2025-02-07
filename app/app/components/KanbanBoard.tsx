@@ -18,10 +18,10 @@ import TaskCard from "./TaskCard";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export default function KanbanBoard() {
+export default function KanbanBoard({ column }: { column: Column[] }) {
   const [isAddingColumn, setisAddingColumn] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
-  const [columns, setColumns] = useState<Column[]>([]);
+  const [columns, setColumns] = useState<Column[]>(column);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);

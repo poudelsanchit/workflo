@@ -81,7 +81,7 @@ export default function ColumnContainer(props: Props) {
       >
         <div className="flex items-center  gap-2 w-full  pb-1 ">
           <div
-            className="text-black text-base"
+            className="text-black text-base font-semibold"
             onClick={() => {
               setEditMode(true);
             }}
