@@ -3,6 +3,7 @@ export interface Column {
   id: Id;
   title: string;
   color?: string;
+  _id?: string;
 }
 
 export type Task = {

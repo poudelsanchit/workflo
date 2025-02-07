@@ -53,6 +53,8 @@ export default function ColumnContainer(props: Props) {
     },
     disabled: editMode,
   });
+  const [newTitle, setNewTitle] = useState(column.title); // Store the column title in state\
+
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
@@ -95,15 +97,20 @@ export default function ColumnContainer(props: Props) {
             {editMode && (
               <input
                 autoFocus
-                className=" text-black focus:outline-none text-base border rounded "
-                value={column.title}
-                onChange={(e) => updateColumn(column.id, e.target.value)}
+                className="text-black focus:outline-none text-base border rounded"
+                value={newTitle} // Bind to newTitle state
+                onChange={(e) => {
+                  setNewTitle(e.target.value); // Update state on input change
+                }}
                 onBlur={() => {
-                  setEditMode(false);
+                  setEditMode(false); // Close edit mode on blur
+                  updateColumn(column.id, newTitle); // Update column title on blur
                 }}
                 onKeyDown={(e) => {
-                  if (e.key !== "Enter") return;
-                  setEditMode(false);
+                  if (e.key === "Enter") {
+                    updateColumn(column.id, newTitle); // Update column title on Enter key
+                    setEditMode(false); // Exit edit mode
+                  }
                 }}
               />
             )}

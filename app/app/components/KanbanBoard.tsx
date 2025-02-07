@@ -17,8 +17,16 @@ import { createPortal } from "react-dom";
 import TaskCard from "./TaskCard";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { toast } from "sonner";
 
-export default function KanbanBoard({ column }: { column: Column[] }) {
+export default function KanbanBoard({
+  column,
+  pageId,
+}: {
+  column: Column[];
+  pageId: string;
+}) {
   const [isAddingColumn, setisAddingColumn] = useState(false);
   const [newColumnTitle, setNewColumnTitle] = useState("");
   const [columns, setColumns] = useState<Column[]>(column);
@@ -32,6 +40,52 @@ export default function KanbanBoard({ column }: { column: Column[] }) {
       activationConstraint: { distance: 3 },
     })
   );
+
+  //Add new column to the column model
+  const createNewColumn = async () => {
+    try {
+      const columnToAdd: Column = {
+        id: columns.length,
+        title: newColumnTitle,
+        color: "#8338ec",
+      };
+      const response = await axios.post(
+        `/api/private/${pageId}/column`,
+        columnToAdd
+      );
+      const newColumn = response.data.newColumn;
+      setColumns([...columns, newColumn]);
+      setisAddingColumn(false);
+      setNewColumnTitle("");
+
+      console.log(response.data);
+    } catch (error) {
+      toast("Error creating a new column");
+    }
+  };
+  console.log(columns);
+
+  //Update column title
+  const updateColumn = async (id: Id, title: string): Promise<void> => {
+    try {
+      const response = await axios.patch(`/api/private/${pageId}/column`, {
+        title: title,
+        columnId: id,
+      });
+      // Check if the response is successful
+      if (response.status === 200) {
+        // Update local state with the new column title
+        const newColumns = columns.map((col) => {
+          if (col.id !== id) return col; // Keep other columns unchanged
+          return { ...col, title }; // Update the title of the column that matches id
+        });
+
+        setColumns(newColumns); // Update the columns state with the new data
+      }
+    } catch (error) {
+      toast.error("Error updating column title.");
+    }
+  };
 
   return (
     <div className="flex h-full w-full gap-3  relative">
@@ -126,15 +180,7 @@ export default function KanbanBoard({ column }: { column: Column[] }) {
       </DndContext>
     </div>
   );
-  function createNewColumn() {
-    const columnToAdd: Column = {
-      id: generateId(),
-      title: newColumnTitle,
-    };
-    setColumns([...columns, columnToAdd]);
-    setisAddingColumn(false);
-    setNewColumnTitle("");
-  }
+
   function generateId() {
     return Math.floor(Math.random() * 10000);
   }
@@ -144,13 +190,7 @@ export default function KanbanBoard({ column }: { column: Column[] }) {
     const newTasks = tasks.filter((t) => t.columnId !== id);
     setTasks(newTasks);
   }
-  function updateColumn(id: Id, title: string) {
-    const newColumns = columns.map((col) => {
-      if (col.id !== id) return col;
-      return { ...col, title };
-    });
-    setColumns(newColumns);
-  }
+
   function createTask(columnId: Id, task: string) {
     const newTask: Task = {
       id: generateId(),

@@ -26,7 +26,7 @@ export default function page({ params }: { params: Promise<{ id: string }> }) {
   }
   return (
     <div>
-      <KanbanBoard column={data.column} />
+      <KanbanBoard column={data.column} pageId={id} />
     </div>
   );
 }
