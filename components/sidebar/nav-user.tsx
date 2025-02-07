@@ -34,7 +34,7 @@ export default function NavUser() {
       <SidebarMenuItem>
         <DropdownMenu>
           {!user && (
-            <div className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-12 bg-gray-200 animate-pulse rounded-sm"></div>
+            <div className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground h-12 bg-gray-200 dark:bg-neutral-900 animate-pulse rounded-sm"></div>
           )}
           {user && (
             <DropdownMenuTrigger asChild>

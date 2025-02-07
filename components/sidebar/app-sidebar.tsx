@@ -16,8 +16,8 @@ import NavUser from "./nav-user";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+    <Sidebar collapsible="icon" {...props} className="dark:bg-neutral-950">
+      <SidebarHeader >
         <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
