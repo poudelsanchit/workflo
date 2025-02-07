@@ -20,13 +20,13 @@ import {
 import { ChevronRight, User } from "lucide-react";
 import Link from "next/link";
 interface NavMainProps {
-  pages?: UserPages; // Use the same UserPages interface
+  pages?: UserPages; 
 }
 export function NavMain({ pages }: NavMainProps) {
   console.log(pages);
   return (
     <SidebarGroup>
-      <SidebarMenu>
+      <SidebarMenu className="text-sm">
         <Collapsible asChild defaultOpen={true} className="group/collapsible">
           {/* Private Section */}
           <SidebarMenuItem>
