@@ -34,7 +34,6 @@ interface NavUserProps {
   user?: UserInfo;
 }
 export function NavUser({ user }: NavUserProps) {
-  console.log(user)
   const { isMobile } = useSidebar();
 
   return (
