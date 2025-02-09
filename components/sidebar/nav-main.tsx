@@ -9,14 +9,17 @@ import {
 } from "@/components/ui/sidebar";
 import { UserPages } from "./app-sidebar";
 
-import { ChevronRight, User } from "lucide-react";
+import { ChevronRight, Plus, User } from "lucide-react";
 import Link from "next/link";
-import { Collapsible,CollapsibleContent,CollapsibleTrigger } from "../ui/collapsible";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
 interface NavMainProps {
-  pages?: UserPages; 
+  pages?: UserPages;
 }
 export function NavMain({ pages }: NavMainProps) {
-  console.log(pages);
   return (
     <SidebarGroup>
       <SidebarMenu className="text-sm font-semibold">
@@ -24,10 +27,17 @@ export function NavMain({ pages }: NavMainProps) {
           {/* Private Section */}
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip={"Private Page"} className="dark:text-gray-400">
+              <SidebarMenuButton
+                tooltip={"Private Page"}
+                className="dark:text-gray-400"
+              >
                 <User />
                 <span>Private</span>
-                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                <div className="flex ml-auto justify-center items-center gap-2  ">
+                  <Plus size={16}    className="opacity-0 group-hover/collapsible:opacity-100 transition-opacity duration-200 hover:bg-neutral-500 rounded-sm h-4 w-4"
+                  />
+                  <ChevronRight size={18} className=" transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                </div>
               </SidebarMenuButton>
             </CollapsibleTrigger>
             <CollapsibleContent>
@@ -50,7 +60,10 @@ export function NavMain({ pages }: NavMainProps) {
         <Collapsible asChild defaultOpen={true} className="group/collapsible">
           <SidebarMenuItem>
             <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip={"Teamspace"}  className="dark:text-gray-400">
+              <SidebarMenuButton
+                tooltip={"Teamspace"}
+                className="dark:text-gray-400"
+              >
                 <User />
                 <span>Teamspace</span>
                 <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
@@ -71,8 +84,6 @@ export function NavMain({ pages }: NavMainProps) {
             </CollapsibleContent>
           </SidebarMenuItem>
         </Collapsible>
-
-
       </SidebarMenu>
     </SidebarGroup>
   );
