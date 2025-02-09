@@ -20,7 +20,7 @@ import { NavUser } from "./nav-user";
 interface Page {
   pageId: string;
   title: string;
-  _id: string;
+  _id?: string;
 }
 
 export interface UserPages {
@@ -28,7 +28,7 @@ export interface UserPages {
   teamspace: Page[];
 }
 
-interface UserData {
+export interface UserData {
   pages: UserPages;
   _id: string;
   name: string;
@@ -61,14 +61,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       handleFetchData(session.userId);
     }
   }, [status, session]);
-
+ 
   return (
     <Sidebar collapsible="icon" {...props} className="dark:bg-neutral-950">
       <SidebarHeader>
         <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain pages={userData?.pages} />
+        <NavMain pages={userData?.pages}  setUserData={setUserData}/>
         <NavProjects />
       </SidebarContent>
       <SidebarFooter>

@@ -7,7 +7,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { UserPages } from "./app-sidebar";
+import { UserData, UserPages } from "./app-sidebar";
 
 import { ChevronRight, Plus, User } from "lucide-react";
 import Link from "next/link";
@@ -25,8 +25,9 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 interface NavMainProps {
   pages?: UserPages;
+  setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
 }
-export function NavMain({ pages }: NavMainProps) {
+export function NavMain({ pages, setUserData }: NavMainProps) {
   const { data: session } = useSession(); // Get session data
   const userId = session?.userId; // Extract userId from session
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -35,15 +36,15 @@ export function NavMain({ pages }: NavMainProps) {
   const handleCreatePage = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      console.log(pageTitle);
-      console.log(userId);
-
       const response = await axios.post(`/api/private`, {
         title: pageTitle,
         userId: userId,
       });
-      const newPage = response.data;
-      console.log(newPage);
+      const data = response.data;
+      if (response.status) {
+        setUserData(data.user);
+      }
+      console.log(data);
       setIsDialogOpen(false);
       setPageTitle("");
     } catch (error) {
