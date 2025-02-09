@@ -20,12 +20,15 @@ interface NavMainProps {
   pages?: UserPages;
 }
 export function NavMain({ pages }: NavMainProps) {
+  const handleCreatePage=()=>{
+    
+  }
   return (
     <SidebarGroup>
       <SidebarMenu className="text-sm font-semibold">
         <Collapsible asChild defaultOpen={true} className="group/collapsible">
           {/* Private Section */}
-          <SidebarMenuItem>
+          <SidebarMenuItem className="group/sidebar-item">
             <CollapsibleTrigger asChild>
               <SidebarMenuButton
                 tooltip={"Private Page"}
@@ -34,9 +37,16 @@ export function NavMain({ pages }: NavMainProps) {
                 <User />
                 <span>Private</span>
                 <div className="flex ml-auto justify-center items-center gap-2  ">
-                  <Plus size={16}    className="opacity-0 group-hover/collapsible:opacity-100 transition-opacity duration-200 hover:bg-neutral-500 rounded-sm h-4 w-4"
-                  />
-                  <ChevronRight size={18} className=" transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                  <div className="ml-auto p-1 rounded-sm hover:bg-gray-300/20 opacity-0 transition-opacity duration-200 group-hover/sidebar-item:opacity-100" onClick={handleCreatePage}>
+                    <Plus
+                      size={16}
+                    />
+                  </div>
+
+                  {/* <ChevronRight
+                    size={18}
+                    className=" transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                  /> */}
                 </div>
               </SidebarMenuButton>
             </CollapsibleTrigger>
