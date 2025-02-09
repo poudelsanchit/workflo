@@ -4,6 +4,7 @@ export interface Column {
   title: string;
   color?: string;
   _id?: string;
+  tasks?: Task[]
 }
 
 export type Task = {

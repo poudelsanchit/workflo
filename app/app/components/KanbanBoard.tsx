@@ -22,9 +22,11 @@ import { toast } from "sonner";
 
 export default function KanbanBoard({
   column,
+  task,
   pageId,
 }: {
   column: Column[];
+  task: Task[];
   pageId: string;
 }) {
   const [isAddingColumn, setisAddingColumn] = useState(false);
@@ -34,7 +36,7 @@ export default function KanbanBoard({
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>(task);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 3 },
@@ -89,7 +91,6 @@ export default function KanbanBoard({
 
   //Detele Column Id
   const deleteColumn = async (id: Id): Promise<void> => {
-    console.log(id);
     try {
       const response = await axios.delete(`/api/private/${pageId}/column`, {
         data: { columnId: id }, // ✅ Include columnId inside data
@@ -104,6 +105,22 @@ export default function KanbanBoard({
       }
     } catch (error) {
       toast.error("Error updating column title.");
+    }
+  };
+
+  const createTask = async (columnId: Id, task: string) => {
+    try {
+      const response = await axios.post(
+        `/api/private/${pageId}/column/${columnId}/task`,
+        {
+          content: task,
+        }
+      );
+      const newTask = response.data.newTask;
+      setTasks([...tasks, newTask]);
+    } catch (err) {
+      console.log(err);
+      toast("Error creating task");
     }
   };
 
@@ -208,14 +225,6 @@ export default function KanbanBoard({
     return Math.floor(Math.random() * 10000);
   }
 
-  function createTask(columnId: Id, task: string) {
-    const newTask: Task = {
-      id: generateId(),
-      columnId,
-      content: task,
-    };
-    setTasks([...tasks, newTask]);
-  }
   function deleteTask(id: Id) {
     const newTasks = tasks.filter((task) => task.id !== id);
     setTasks(newTasks);

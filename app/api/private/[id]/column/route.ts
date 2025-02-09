@@ -11,14 +11,14 @@ export async function POST(req: Request, { params }: { params: Params }) {
 
   try {
     const pageId = params.id;
-    const { id, title, color } = await req.json(); // Extract userId and title from the request body
+    const { id, title, color, tasks } = await req.json(); // Extract userId and title from the request body
 
     // Check if the user exists in the database
     const page = await PrivatePageModel.findById(pageId);
     if (!page) {
       return NextResponse.json({ error: "Page not found" }, { status: 404 });
     }
-    const column = { id, title, color };
+    const column = { id, title, color, tasks: tasks || [] };
     page.column.push(column);
     await page.save();
 

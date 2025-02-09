@@ -21,6 +21,22 @@ const PrivatePageSchema: Schema<IPrivatePage> = new Schema(
         color: {
           type: String,
         },
+        tasks: {
+          type: [
+            {
+              id: {
+                type: String,
+              },
+              columnId: {
+                type: String,
+              },
+              content: {
+                type: String,
+              },
+            },
+          ],
+          default: [],
+        },
       },
     ],
   },
