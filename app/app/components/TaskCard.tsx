@@ -3,14 +3,7 @@ import { Id, Task } from "@/types/types";
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Calendar, CalendarRange, MoreHorizontal, Trash } from "lucide-react";
-import { Separator } from "@radix-ui/react-separator";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"; // Assuming you're using ShadCN's Popover
-import { BsTrash } from "react-icons/bs";
+import { CalendarRange, Trash } from "lucide-react";
 
 interface Props {
   task: Task;

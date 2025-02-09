@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { AudioWaveform, Kanban } from "lucide-react";
+import {  Kanban } from "lucide-react";
 import {
   SidebarMenu,
   SidebarMenuButton,

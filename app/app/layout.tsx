@@ -12,7 +12,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
-  SidebarProvider,
   SidebarTrigger,
   useSidebar, // Add this import
 } from "@/components/ui/sidebar";
@@ -26,7 +25,6 @@ export default function Layout({
 }>) {
   const pathname = usePathname().split("/")[2];
   const { open } = useSidebar(); // Get sidebar state
-
 
   return (
     <>

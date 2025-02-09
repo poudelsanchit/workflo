@@ -8,7 +8,6 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { UserData, UserPages } from "./app-sidebar";
-
 import { ChevronRight, Plus, User } from "lucide-react";
 import Link from "next/link";
 import {

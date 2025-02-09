@@ -23,7 +23,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { signOut } from "next-auth/react";
-import useUserStore from "@/app/store/userStore";
 interface UserInfo {
   name?: string;
   email?: string;
