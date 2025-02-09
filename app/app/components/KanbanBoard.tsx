@@ -57,6 +57,7 @@ export default function KanbanBoard({
       setColumns([...columns, newColumn]);
       setisAddingColumn(false);
       setNewColumnTitle("");
+      toast("Column created successfully");
 
       console.log(response.data);
     } catch (error) {
@@ -80,6 +81,26 @@ export default function KanbanBoard({
         });
 
         setColumns(newColumns); // Update the columns state with the new data
+      }
+    } catch (error) {
+      toast.error("Error updating column title.");
+    }
+  };
+
+  //Detele Column Id
+  const deleteColumn = async (id: Id): Promise<void> => {
+    console.log(id);
+    try {
+      const response = await axios.delete(`/api/private/${pageId}/column`, {
+        data: { columnId: id }, // ✅ Include columnId inside data
+      });
+      console.log(response);
+      if (response.status === 200) {
+        const filteredColumns = columns.filter((col) => col.id !== id);
+        setColumns(filteredColumns);
+        const newTasks = tasks.filter((t) => t.columnId !== id);
+        setTasks(newTasks);
+        toast("Column deleted succesfully");
       }
     } catch (error) {
       toast.error("Error updating column title.");
@@ -114,7 +135,7 @@ export default function KanbanBoard({
               <textarea
                 autoFocus
                 placeholder="Add new Column..."
-                className="w-full text-black dark:text-white rounded border border-black bg-black/10 p-3 text-sm  placeholder-black focus:outline-0"
+                className="w-[250px] text-black dark:text-white rounded border border-neutral-950 dark:border-[#252528] bg-violet-400/20 dark:bg-neutral-950 p-3 text-sm  placeholder-neutral-950 dark:placeholder:text-white focus:outline-0 placeholder:font-semibold"
                 value={newColumnTitle}
                 onChange={(e) => {
                   setNewColumnTitle(e.target.value);
@@ -123,7 +144,7 @@ export default function KanbanBoard({
               <div className="flex ml-auto  gap-2">
                 <Button
                   variant={"outline"}
-                  className="text-black h-8"
+                  className="text-black h-8 dark:text-white dark:hover:bg-neutral-950/80 rounded-sm"
                   onClick={() => {
                     setisAddingColumn(false);
                   }}
@@ -131,7 +152,7 @@ export default function KanbanBoard({
                   Cancel
                 </Button>
                 <Button
-                  className="h-8 bg-black hover:bg-black/80"
+                  className="h-8 bg-black dark:bg-white dark:text-neutral-950 hover:bg-black/80 rounded-sm"
                   onClick={createNewColumn}
                 >
                   Create
@@ -148,7 +169,7 @@ export default function KanbanBoard({
             variant={"outlineBorderLess"}
             className="  flex justify-center items-center gap-1 text-sm  text-neutral-50 cursor-pointer mb-auto 
              min-w-max  border border-[#252528] bg-black dark:bg-neutral-950 rounded-md dark:text-white
-              shadow-md dark:hover:bg-black/80  px-10 "
+              shadow-md dark:hover:bg-black/8 hover:text-white  px-10 "
           >
             Add a Column <Plus size={18} />
           </Button>
@@ -185,12 +206,6 @@ export default function KanbanBoard({
 
   function generateId() {
     return Math.floor(Math.random() * 10000);
-  }
-  function deleteColumn(id: Id) {
-    const filteredColumns = columns.filter((col) => col.id !== id);
-    setColumns(filteredColumns);
-    const newTasks = tasks.filter((t) => t.columnId !== id);
-    setTasks(newTasks);
   }
 
   function createTask(columnId: Id, task: string) {

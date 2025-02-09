@@ -76,3 +76,40 @@ export async function PATCH(req: Request, { params }: { params: Params }) {
     );
   }
 }
+export async function DELETE(req: Request, { params }: { params: Params }) {
+  await dbConnect();
+  try {
+    const pageId = params.id;
+    const { columnId } = await req.json();
+    const page = await PrivatePageModel.findById(pageId);
+    if (!page) {
+      return NextResponse.json({
+        message: "Page not found",
+        status: 404,
+      });
+    }
+    // Find the column index to delete
+    const columnIndex = page.column.findIndex(
+      (col) => col.id?.toString() === columnId
+    );
+    if (columnIndex === -1) {
+      return NextResponse.json({
+        message: "Column not found",
+        status: 404,
+      });
+    }
+    const deletedColumn = page.column.splice(columnIndex, 1);
+
+    await page.save();
+
+    return NextResponse.json({
+      message: "Column Deleted Successfully",
+      column: deletedColumn,
+    });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

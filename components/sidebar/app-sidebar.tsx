@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -63,15 +62,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   }, [status, session]);
  
   return (
-    <Sidebar collapsible="icon" {...props} className="dark:bg-neutral-950">
-      <SidebarHeader>
+    <Sidebar collapsible="icon" {...props} >
+      <SidebarHeader className="dark:bg-neutral-950 rounded-t-lg">
         <TeamSwitcher />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="dark:bg-neutral-950 ">
         <NavMain pages={userData?.pages}  setUserData={setUserData}/>
         <NavProjects />
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="dark:bg-neutral-950 rounded-b-lg">
         <NavUser
           user={{
             name: userData?.name,

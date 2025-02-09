@@ -159,7 +159,7 @@ export default function ColumnContainer(props: Props) {
           <textarea
             autoFocus
             placeholder="Add new task..."
-            className="w-full text-black rounded border border-purple-600 bg-violet-400/20 p-3 text-sm  placeholder-purple-600 focus:outline-0"
+            className="w-full text-black dark:text-white rounded border border-neutral-950 dark:border-[#252528] bg-violet-400/20 dark:bg-neutral-950 p-3 text-sm  placeholder-neutral-900 placeholder:font-semibold dark:placeholder:text-white focus:outline-0"
             value={newTask}
             onChange={(e) => {
               setNewTask(e.target.value);
@@ -168,7 +168,7 @@ export default function ColumnContainer(props: Props) {
           <div className="flex ml-auto  gap-2">
             <Button
               variant={"outline"}
-              className="text-black h-8"
+              className="text-black h-8 dark:text-white dark:hover:bg-neutral-950/80 rounded-sm"
               onClick={() => {
                 setIsAddingTask(false);
               }}
@@ -176,7 +176,7 @@ export default function ColumnContainer(props: Props) {
               Cancel
             </Button>
             <Button
-              className="h-8"
+              className="h-8 rounded-sm"
               onClick={() => {
                 createTask(column.id, newTask);
                 setIsAddingTask(false);
@@ -194,20 +194,11 @@ export default function ColumnContainer(props: Props) {
           onClick={() => {
             setIsAddingTask(true);
           }}
-          className="flex justify-center items-center text-sm text-neutral-600 dark:text-gray-400 font-semibold hover:text-neutral-300 transition-all duration-100 mr-auto pl-1 "
+          className="flex justify-center items-center text-sm text-neutral-600 dark:text-gray-400 font-semibold  transition-all duration-100 mr-auto pl-1 "
         >
           Add Task <BsPlus size={16} />
         </button>
       )}
-
-      {/* <button
-        onClick={() => {
-          createTask(column.id);
-        }}
-        className="flex justify-center items-center text-sm text-neutral-600 hover:text-neutral-300 transition-all duration-100 mr-auto pl-1 "
-      >
-        Add Task <BsPlus size={16} />
-      </button> */}
     </div>
   );
 }
