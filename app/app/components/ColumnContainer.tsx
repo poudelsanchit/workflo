@@ -83,7 +83,7 @@ export default function ColumnContainer(props: Props) {
       >
         <div className="flex items-center  gap-2 w-full  pb-1 ">
           <div
-            className="text-black text-base font-semibold"
+            className="text-black dark:text-white text-base font-semibold"
             onClick={() => {
               setEditMode(true);
             }}
@@ -93,11 +93,11 @@ export default function ColumnContainer(props: Props) {
           <div className="flex justify-center items-center py-1 text-sm rounded-full text-neutral-400">
             {3}
           </div>
-          <div>
+          <div className="w-full">
             {editMode && (
               <input
                 autoFocus
-                className="text-black focus:outline-none text-base border rounded"
+                className="text-black dark:text-white font-semibold focus:outline-none text-base border rounded w-full border-neutral-400/20 pl-2"
                 value={newTitle} // Bind to newTitle state
                 onChange={(e) => {
                   setNewTitle(e.target.value); // Update state on input change
@@ -194,7 +194,7 @@ export default function ColumnContainer(props: Props) {
           onClick={() => {
             setIsAddingTask(true);
           }}
-          className="flex justify-center items-center text-sm text-neutral-600 hover:text-neutral-300 transition-all duration-100 mr-auto pl-1 "
+          className="flex justify-center items-center text-sm text-neutral-600 dark:text-gray-400 font-semibold hover:text-neutral-300 transition-all duration-100 mr-auto pl-1 "
         >
           Add Task <BsPlus size={16} />
         </button>

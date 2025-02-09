@@ -63,7 +63,6 @@ export default function KanbanBoard({
       toast("Error creating a new column");
     }
   };
-  console.log(columns);
 
   //Update column title
   const updateColumn = async (id: Id, title: string): Promise<void> => {
@@ -115,7 +114,7 @@ export default function KanbanBoard({
               <textarea
                 autoFocus
                 placeholder="Add new Column..."
-                className="w-full text-black rounded border border-black bg-black/10 p-3 text-sm  placeholder-black focus:outline-0"
+                className="w-full text-black dark:text-white rounded border border-black bg-black/10 p-3 text-sm  placeholder-black focus:outline-0"
                 value={newColumnTitle}
                 onChange={(e) => {
                   setNewColumnTitle(e.target.value);
@@ -146,7 +145,10 @@ export default function KanbanBoard({
             onClick={() => {
               setisAddingColumn(true);
             }}
-            className="  flex justify-center items-center gap-1 text-sm  text-neutral-50 cursor-pointer mb-auto  min-w-max bg-black hover:bg-black/80  "
+            variant={"outlineBorderLess"}
+            className="  flex justify-center items-center gap-1 text-sm  text-neutral-50 cursor-pointer mb-auto 
+             min-w-max  border border-[#252528] bg-black dark:bg-neutral-950 rounded-md dark:text-white
+              shadow-md dark:hover:bg-black/80  px-10 "
           >
             Add a Column <Plus size={18} />
           </Button>

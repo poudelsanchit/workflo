@@ -23,6 +23,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { Label } from "../ui/label";
 interface NavMainProps {
   pages?: UserPages;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
@@ -47,6 +48,7 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
       console.log(data);
       setIsDialogOpen(false);
       setPageTitle("");
+      toast("New space created succesfully");
     } catch (error) {
       toast("Error creating the page");
       console.error(error);
@@ -132,16 +134,17 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
         </SidebarMenu>
       </SidebarGroup>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
+        <DialogContent className="bg-[#121212]">
           <DialogHeader>
-            <DialogTitle>Create a new page</DialogTitle>
+            <DialogTitle>Create a new space</DialogTitle>
           </DialogHeader>
 
-          <form>
+          <form onSubmit={handleCreatePage}>
             <div className="flex flex-col gap-3">
               <div className="grid gap-2">
+                <Label>Space Title</Label>
                 <Input
-                  id="page-title"
+                  id="sppace-title"
                   type="text"
                   placeholder="Provide the page title"
                   value={pageTitle}
@@ -150,14 +153,17 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
                 />
               </div>
               <p>
-                Are you sure you want to create a new page under{" "}
+                Are you sure you want to create a new space under{" "}
                 <strong>private</strong>?
               </p>
               <div className="flex gap-4">
                 <Button
-                  type="submit"
-                  className="w-full dark:bg-purple-800 text-white bg-black"
-                  onClick={() => {
+                  type="button"
+                  variant={"outline"}
+                  className="w-full  text-white bg-black"
+                  onClick={(e) => {
+                    e.preventDefault();
+
                     setIsDialogOpen(false);
                   }}
                 >
@@ -165,8 +171,7 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
                 </Button>
                 <Button
                   type="submit"
-                  className="w-full dark:bg-white bg-black"
-                  onClick={handleCreatePage}
+                  className="w-full dark:bg-purple-700 text-white bg-black"
                 >
                   Confirm
                 </Button>

@@ -58,7 +58,7 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className="opacity-50 task relative bg-[#e2d9d9] text-sm p-2.5 h-20 min-h-max flex flex-col pt-4 pb-2 rounded text-left cursor-grab"
+        className="opacity-50 task relative bg-[#e2d9d9] dark:bg-neutral-700/80 text-sm p-2.5 h-20 min-h-max flex flex-col pt-4 pb-2 rounded text-left cursor-grab"
       />
     );
   }
@@ -100,7 +100,7 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
       onMouseLeave={() => {
         setMouseIsOver(false);
       }}
-      className="task bg-white relative border-2 border-[#e8e8e8] shadow-sm text-black text-sm p-2.5 h-18 min-h-max flex flex-col pt-4 pb-2 rounded-md text-left cursor-grab"
+      className="task dark:bg-white dark:text-black bg-black text-white relative  font-semibold  shadow-sm  text-sm p-2.5 h-18 min-h-max flex flex-col pt-4 pb-2 rounded-md text-left cursor-grab"
     >
       <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-sm pb-1">
         {task.content}
