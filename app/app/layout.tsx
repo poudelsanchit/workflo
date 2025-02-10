@@ -16,7 +16,7 @@ import {
   useSidebar, // Add this import
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
-import { ThemeToggler } from "./components/ThemeToggler";
+import { ThemeToggler } from "./components/theme/ThemeToggler";
 
 export default function Layout({
   children,

@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { use, useEffect, useState } from "react";
-import KanbanBoard from "../components/KanbanBoard";
+import KanbanBoard from "../components/board/KanbanBoard";
 import { Column } from "@/types/types";
 
 interface Data {

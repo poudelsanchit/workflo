@@ -1,7 +1,7 @@
 "use client";
 import { useMemo, useState } from "react";
 import { Column, Id, Task } from "@/types/types";
-import ColumnContainer from "./ColumnContainer";
+import ColumnContainer from "../columns/ColumnContainer";
 import {
   DndContext,
   DragEndEvent,
@@ -14,7 +14,7 @@ import {
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
-import TaskCard from "./TaskCard";
+import TaskCard from "../tasks/TaskCard";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import axios from "axios";

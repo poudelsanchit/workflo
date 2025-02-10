@@ -3,7 +3,7 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 import { BsPlus } from "react-icons/bs";
-import TaskCard from "./TaskCard";
+import TaskCard from "../tasks/TaskCard";
 import { MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,

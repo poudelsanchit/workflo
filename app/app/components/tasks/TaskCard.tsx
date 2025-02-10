@@ -1,9 +1,9 @@
-import { BiTrash } from "react-icons/bi";
 import { Id, Task } from "@/types/types";
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CalendarRange, Trash } from "lucide-react";
+import TaskDialog from "./TaskDialog";
 
 interface Props {
   task: Task;
@@ -81,37 +81,40 @@ export default function TaskCard({ task, deleteTask, updateTask }: Props) {
   }
 
   return (
-    <div
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-      {...listeners}
-      onClick={toggleEditMode}
-      onMouseEnter={() => {
-        setMouseIsOver(true);
-      }}
-      onMouseLeave={() => {
-        setMouseIsOver(false);
-      }}
-      className="task dark:bg-white dark:text-black bg-black text-white relative  font-semibold  shadow-sm  text-sm p-2.5 h-18 min-h-max flex flex-col pt-4 pb-2 rounded-md text-left cursor-grab"
-    >
-      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-sm pb-1">
-        {task.content}
-      </p>
-
+    <>
       <div
-        className=" absolute right-3 bottom-3 cursor-pointer text-red-500"
-        onClick={() => {
-          deleteTask(task.id);
-          setPopoverOpen(false); // Close popover after deletion
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+        {...listeners}
+        onClick={toggleEditMode}
+        onMouseEnter={() => {
+          setMouseIsOver(true);
         }}
+        onMouseLeave={() => {
+          setMouseIsOver(false);
+        }}
+        className="task dark:bg-white dark:text-black bg-black text-white relative  font-semibold  shadow-sm  text-sm p-2.5 h-18 min-h-max flex flex-col pt-4 pb-2 rounded-md text-left cursor-grab"
       >
-        <Trash size={16} />
+        <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-sm pb-1">
+          {task.content}
+        </p>
+
+        <div
+          className=" absolute right-3 bottom-3 cursor-pointer text-red-500"
+          onClick={() => {
+            deleteTask(task.id);
+            setPopoverOpen(false); // Close popover after deletion
+          }}
+        >
+          <Trash size={16} />
+        </div>
+        <div className="flex gap-1 items-center text-xs text-[#6a6a6a] py-2">
+          <CalendarRange size={14} />
+          Jan 8, 2025
+        </div>
       </div>
-      <div className="flex gap-1 items-center text-xs text-[#6a6a6a] py-2">
-        <CalendarRange size={14} />
-        Jan 8, 2025
-      </div>
-    </div>
+      <TaskDialog />
+    </>
   );
 }
