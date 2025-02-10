@@ -124,10 +124,6 @@ export default function KanbanBoard({
     }
   };
   function updateTask(id: Id, content: string, columnId: string) {
-    console.log(id);
-    console.log(content);
-    console.log(columnId);
-
     const newTasks = tasks.map((task) => {
       if (task.id !== id) return task;
       return { ...task, content };
