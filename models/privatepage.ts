@@ -1,4 +1,4 @@
-import { Column, Id } from "@/types/types";
+import { Column } from "@/types/types";
 import mongoose, { Schema, Document, Model } from "mongoose";
 // Interface for PrivatePage model
 export interface IPrivatePage extends Document {
