@@ -3,7 +3,7 @@ import { PrivatePageModel } from "@/models/privatepage";
 import { NextResponse } from "next/server";
 
 interface Params {
-  id: string;       // Page ID
+  id: string; // Page ID
   columnId: string; // Column ID
 }
 
@@ -32,9 +32,9 @@ export async function POST(req: Request, { params }: { params: Params }) {
 
     // Create a new task object
     const newTask = {
-      id: new Date().toISOString(),  // Using ISO date as a simple task ID (can be replaced with UUID or Mongo ObjectId)
-      content,                       // Task content from the request body
-      columnId,                      // The column to which the task belongs
+      id: new Date().toISOString(), // Using ISO date as a simple task ID (can be replaced with UUID or Mongo ObjectId)
+      content, // Task content from the request body
+      columnId, // The column to which the task belongs
     };
 
     // Add the new task to the column's tasks array
@@ -47,7 +47,7 @@ export async function POST(req: Request, { params }: { params: Params }) {
     return NextResponse.json(
       {
         message: "Task Created Successfully",
-        newTask,  // Return the newly created task
+        newTask, // Return the newly created task
         pageId,
         columnId,
       },
@@ -57,6 +57,53 @@ export async function POST(req: Request, { params }: { params: Params }) {
     console.error("Error creating task:", error);
     return NextResponse.json(
       { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+//Update Task enpoint
+export async function PUT(req: Request, { params }: { params: Params }) {
+  await dbConnect();
+  try {
+    const { id: pageId, columnId } = params;
+    console.log(params);
+    const { content, taskId } = await req.json(); // Extract content and task ID
+
+    const page = await PrivatePageModel.findById(pageId);
+    if (!page) {
+      return NextResponse.json({ error: "Page not found" }, { status: 404 });
+    }
+
+    // Ensure correct column property (use `columns` if that's what your schema uses)
+    const column = page.column.find((col) => col.id?.toString() === columnId);
+    if (!column) {
+      return NextResponse.json({ error: "Column not found" }, { status: 404 });
+    }
+
+    // Ensure tasks array exists
+    if (!column.tasks) column.tasks = [];
+
+    // Find the task to update
+    const task = column.tasks.find((task) => task.id === taskId);
+    if (!task) {
+      return NextResponse.json({ error: "Task not found" }, { status: 404 });
+    }
+
+    // Update task content
+    task.content = content;
+
+    // Save the updated page with the modified task
+    await page.save();
+
+    return NextResponse.json({
+      message: "Task Updated Successfully",
+      updatedTask: task,
+    });
+  } catch (error) {
+    console.error("Error updating task:", error);
+    return NextResponse.json(
+      { error: "Error updating tasks" },
       { status: 500 }
     );
   }

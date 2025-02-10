@@ -123,6 +123,17 @@ export default function KanbanBoard({
       toast("Error creating task");
     }
   };
+  function updateTask(id: Id, content: string, columnId: string) {
+    console.log(id);
+    console.log(content);
+    console.log(columnId);
+
+    const newTasks = tasks.map((task) => {
+      if (task.id !== id) return task;
+      return { ...task, content };
+    });
+    setTasks(newTasks);
+  }
 
   return (
     <div className="flex h-full w-full gap-3  relative">
@@ -138,6 +149,7 @@ export default function KanbanBoard({
               <ColumnContainer
                 key={column.id}
                 column={column}
+                pageId={pageId}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
                 createTask={createTask}
@@ -196,6 +208,7 @@ export default function KanbanBoard({
           <DragOverlay>
             {activeColumn && (
               <ColumnContainer
+                pageId={pageId}
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
@@ -209,6 +222,8 @@ export default function KanbanBoard({
             )}
             {activeTask && (
               <TaskCard
+                pageId={pageId}
+                columnId={activeColumn?.id}
                 task={activeTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
@@ -229,13 +244,7 @@ export default function KanbanBoard({
     const newTasks = tasks.filter((task) => task.id !== id);
     setTasks(newTasks);
   }
-  function updateTask(id: Id, content: string) {
-    const newTasks = tasks.map((task) => {
-      if (task.id !== id) return task;
-      return { ...task, content };
-    });
-    setTasks(newTasks);
-  }
+
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Column") {
       setActiveColumn(event.active.data.current.column);

@@ -15,16 +15,18 @@ import { Button } from "@/components/ui/button";
 
 interface Props {
   column: Column;
+  pageId: string;
   deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
   createTask: (columnId: Id, newTask: string) => void;
   tasks: Task[];
   deleteTask: (id: Id) => void;
-  updateTask: (id: Id, content: string) => void;
+  updateTask: (id: Id, content: string,columnId:string) => void;
 }
 export default function ColumnContainer(props: Props) {
   const {
     column,
+    pageId,
     deleteColumn,
     updateColumn,
     createTask,
@@ -146,6 +148,8 @@ export default function ColumnContainer(props: Props) {
             return (
               <TaskCard
                 key={task.id}
+                pageId={pageId}
+                columnId={column.id}
                 task={task}
                 deleteTask={deleteTask}
                 updateTask={updateTask}

@@ -9,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Popover,
@@ -23,21 +22,87 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-export default function TaskDialog() {
+import { Textarea } from "@/components/ui/textarea";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner";
+import axios from "axios";
+import { Id } from "@/types/types";
+
+interface Props {
+  content: string;
+  editMode: boolean;
+  onChange: any;
+  pageId: string;
+  toggleEditMode: () => void;
+  columnId: string;
+  taskId: string | number;
+  updateTask: (id: Id, content: string, columnId: string) => void;
+}
+
+const formSchema = z.object({
+  content: z.string().min(2).max(50),
+});
+export default function TaskDialog({
+  content,
+  editMode,
+  onChange,
+  toggleEditMode,
+  pageId,
+  columnId,
+  taskId,
+  updateTask,
+}: Props) {
+  const [isRequesting, setIsRequesting] = useState(false);
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      content: content,
+    },
+  });
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      setIsRequesting(true);
+      const response = await axios.put(
+        `/api/private/${pageId}/column/${columnId}/task`,
+        {
+          content: values.content,
+          taskId,
+        }
+      );
+      if (response.status === 200) {
+        const { content, id, columnId } = response.data.updatedTask;
+        updateTask(id, content, columnId);
+        // updateTask(response.data.updatedTask);
+        toast("Updated Succesfully");
+      }
+      setIsRequesting(false);
+      toggleEditMode();
+    } catch (error) {
+      setIsRequesting(false);
+
+      toast("Internal server error");
+    }
+  };
   const [date, setDate] = useState<Date>();
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline">Edit Task</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-max font-semibold">
+    <Dialog open={editMode} onOpenChange={onChange}>
+      <DialogContent className="sm:max-w-xl font-semibold">
         <DialogHeader>
           <DialogTitle>Edit Task</DialogTitle>
           <DialogDescription>
@@ -45,95 +110,110 @@ export default function TaskDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              TasK title
-            </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
-          </div>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col space-y-8  ">
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-4 items-center gap-4 w-full">
+                    <FormLabel className="text-right ">Task Title</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Title..."
+                        {...field}
+                        className=" w-96"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="username" className="text-right">
+                  Deadline
+                </Label>
 
-          {/* Deadline starts here */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Deadline
-            </Label>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-[240px] justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                      )}
+                    >
+                      <CalendarIcon />
+                      {date ? format(date, "PPP") : <span>Pick a date</span>}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto p-0"
+                    align="start"
+                    side="top"
+                  >
+                    <Calendar
+                      className="pointer-events-auto"
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
 
-            {/* Calendar Button */}
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-[240px] justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start" side="top">
-                <Calendar
-                  className="pointer-events-auto"
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            {/* Calendar Button end */}
-          </div>
-          {/* Deadline ends here */}
-
-          {/* Issue Type starts here */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="issue" className="text-right">
-              Label
-            </Label>
-            <Select>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a label" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="big">Bug</SelectItem>
-                  <SelectItem value="docs">Documentation</SelectItem>
-                  <SelectItem value="feature">Feature</SelectItem>
-                  <SelectItem value="help">Help</SelectItem>
-                  <SelectItem value="refactor">Refactor</SelectItem>
-                  <SelectItem value="design">Design</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          {/* Issue Type ends here */}
-          {/* Priority Type starts here */}
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="issue" className="text-right">
-              Priority
-            </Label>
-            <Select>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a priority" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="critical">Critical</SelectItem>
-                  <SelectItem value="high">High</SelectItem>
-                  <SelectItem value="medium">Medium</SelectItem>
-                  <SelectItem value="low">Low</SelectItem>
-                  <SelectItem value="optional">optional</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          {/* Priority Type ends here */}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="issue" className="text-right">
+                  Label
+                </Label>
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a label" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="big">Bug</SelectItem>
+                      <SelectItem value="docs">Documentation</SelectItem>
+                      <SelectItem value="feature">Feature</SelectItem>
+                      <SelectItem value="help">Help</SelectItem>
+                      <SelectItem value="refactor">Refactor</SelectItem>
+                      <SelectItem value="design">Design</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="issue" className="text-right">
+                  Priority
+                </Label>
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select a priority" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value="critical">Critical</SelectItem>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
+                      <SelectItem value="optional">optional</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div> */}
+              <Button
+                type="submit"
+                className="bg-neutral-950 hover:bg-neutral-950/90 w-max ml-auto"
+              >
+                {isRequesting && (
+                  <div className="w-[20px] h-[20px] border-[3px] border-t-blue-500 border-gray-300 rounded-full animate-spin"></div>
+                )}
+                Save changes
+              </Button>
+            </form>
+          </Form>
         </div>
-        <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
