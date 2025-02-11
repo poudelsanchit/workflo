@@ -36,6 +36,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           columnId: task.columnId,
           content: task.content,
           label: task.label,
+          uniqueId: task.uniqueId,
         })) || [] // Fallback to an empty array if tasks is undefined
     ) || [];
 

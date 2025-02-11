@@ -12,4 +12,5 @@ export type Task = {
   columnId: Id;
   content: string;
   label?: string;
+  uniqueId?: string;
 };

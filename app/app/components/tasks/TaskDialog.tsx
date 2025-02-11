@@ -56,7 +56,8 @@ interface Props {
     id: Id,
     content: string,
     columnId: string,
-    label: string
+    label: string,
+    uniqueId: string
   ) => void;
 }
 
@@ -98,8 +99,9 @@ export default function TaskDialog({
       );
       console.log(response);
       if (response.status === 200) {
-        const { content, id, columnId, label } = response.data.updatedTask;
-        updateTask(id, content, columnId, label);
+        const { content, id, columnId, label, uniqueId } =
+          response.data.updatedTask;
+        updateTask(id, content, columnId, label, uniqueId);
         // updateTask(response.data.updatedTask);
         toast("Updated Succesfully");
       }
@@ -115,7 +117,7 @@ export default function TaskDialog({
 
   return (
     <Dialog open={editMode} onOpenChange={onChange}>
-      <DialogContent className="sm:max-w-xl font-semibold">
+      <DialogContent className="sm:max-w-xl font-semibold dark:bg-black border-[#383838] border-[0.11px]">
         <DialogHeader>
           <DialogTitle>Edit Task</DialogTitle>
           <DialogDescription>
@@ -232,7 +234,7 @@ export default function TaskDialog({
               </div> */}
               <Button
                 type="submit"
-                className="bg-neutral-950 hover:bg-neutral-950/90 w-max ml-auto"
+                className="bg-neutral-950 dark:bg-neutral-50 hover:bg-neutral-950/90 w-max ml-auto"
               >
                 {isRequesting && (
                   <div className="w-[20px] h-[20px] border-[3px] border-t-blue-500 border-gray-300 rounded-full animate-spin"></div>

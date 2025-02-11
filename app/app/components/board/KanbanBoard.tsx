@@ -95,7 +95,6 @@ export default function KanbanBoard({
       const response = await axios.delete(`/api/private/${pageId}/column`, {
         data: { columnId: id }, // ✅ Include columnId inside data
       });
-      console.log(response);
       if (response.status === 200) {
         const filteredColumns = columns.filter((col) => col.id !== id);
         setColumns(filteredColumns);
@@ -114,10 +113,9 @@ export default function KanbanBoard({
         `/api/private/${pageId}/column/${columnId}/task`,
         {
           content: task,
-          label: "testing",
+          label: "bug",
         }
       );
-      console.log(response);
       const newTask = response.data.newTask;
       setTasks([...tasks, newTask]);
     } catch (err) {
@@ -129,12 +127,14 @@ export default function KanbanBoard({
     id: Id,
     content: string,
     columnId: string,
-    label: string
+    label: string,
+    uniqueId: string
+
   ) {
     console.log(label);
     const newTasks = tasks.map((task) => {
       if (task.id !== id) return task;
-      return { ...task, content };
+      return { ...task, content,label,uniqueId };
     });
     setTasks(newTasks);
   }

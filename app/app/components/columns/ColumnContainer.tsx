@@ -21,7 +21,13 @@ interface Props {
   createTask: (columnId: Id, newTask: string) => void;
   tasks: Task[];
   deleteTask: (id: Id) => void;
-  updateTask: (id: Id, content: string,columnId:string,label:string) => void;
+  updateTask: (
+    id: Id,
+    content: string,
+    columnId: string,
+    label: string,
+    uniqueId: string
+  ) => void;
 }
 export default function ColumnContainer(props: Props) {
   const {

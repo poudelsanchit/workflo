@@ -14,7 +14,8 @@ interface Props {
     id: Id,
     content: string,
     columnId: string,
-    label: string
+    label: string,
+    uniqueId:string
   ) => void;
 }
 
@@ -94,7 +95,7 @@ export default function TaskCard({
         {...attributes}
         {...listeners}
         onClick={toggleEditMode}
-        className="task dark:bg-white dark:text-black bg-black text-white relative  font-semibold  shadow-sm  text-sm p-2.5 h-18 min-h-max flex flex-col pt-4 pb-2 rounded-md text-left cursor-grab"
+        className="task dark:bg-neutral-950 dark:text-white bg-black text-white relative  font-semibold  shadow-sm  text-sm p-2.5 h-18 min-h-max flex flex-col pt-4 pb-2 rounded-md text-left cursor-grab"
       >
         <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-sm pb-1">
           {task.content}
@@ -114,11 +115,11 @@ export default function TaskCard({
             Jan 8, 2025
           </div>
         </div>
-        <div className="flex  items-center gap-3 border-t-[0.1px] p-1 border-[#4f4e4e]">
+        <div className="flex  items-center gap-3  p-1">
           <div className=" bg-purple-500 text-xs w-max rounded-full px-2 text-black">
             {task.label}
           </div>
-          <div className="text-xs text-[#6a6a6a]">{`#${task.label}-22`}</div>
+          <div className="text-xs text-[#6a6a6a]">{`#${task.uniqueId}`}</div>
         </div>
       </div>
       <TaskDialog

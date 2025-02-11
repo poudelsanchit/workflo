@@ -29,12 +29,26 @@ export async function POST(req: Request, { params }: { params: Params }) {
     // Ensure that tasks is an array, and initialize it if it's undefined
     column.tasks = column.tasks || [];
 
+    const taskNumbers = column.tasks
+      .filter((task) => task.label === label && task.uniqueId) // Ensure uniqueId exists
+      .map((task) => {
+        const uniqueIdStr = String(task.uniqueId); // Convert to string safely
+        const match = uniqueIdStr.match(new RegExp(`^${label}-(\\d+)$`));
+        return match ? parseInt(match[1], 10) : null;
+      })
+      .filter((num): num is number => num !== null); // Type guard to remove null values
+
+    const nextTaskNumber =
+      taskNumbers.length > 0 ? Math.max(...taskNumbers) + 1 : 1;
+    const newUniqueId = `${label}-${nextTaskNumber}`; // Generate the next unique ID
+
     // Create a new task object
     const newTask = {
       id: new Date().toISOString(), // Using ISO date as a simple task ID (can be replaced with UUID or Mongo ObjectId)
       content, // Task content from the request body
       label,
       columnId, // The column to which the task belongs
+      uniqueId: newUniqueId,
     };
 
     // Add the new task to the column's tasks array
@@ -51,7 +65,7 @@ export async function POST(req: Request, { params }: { params: Params }) {
         pageId,
         columnId,
         label,
-      },
+     },
       { status: 201 }
     );
   } catch (error) {
@@ -62,26 +76,22 @@ export async function POST(req: Request, { params }: { params: Params }) {
     );
   }
 }
-
-//Update Task enpoint
 export async function PUT(req: Request, { params }: { params: Params }) {
   await dbConnect();
   try {
     const { id: pageId, columnId } = params;
-    const { content, taskId, label } = await req.json(); // Extract content and task ID
+    const { content, taskId, label: newLabel } = await req.json(); // Extract new label
 
     const page = await PrivatePageModel.findById(pageId);
     if (!page) {
       return NextResponse.json({ error: "Page not found" }, { status: 404 });
     }
 
-    // Ensure correct column property (use `columns` if that's what your schema uses)
     const column = page.column.find((col) => col.id?.toString() === columnId);
     if (!column) {
       return NextResponse.json({ error: "Column not found" }, { status: 404 });
     }
 
-    // Ensure tasks array exists
     if (!column.tasks) column.tasks = [];
 
     // Find the task to update
@@ -90,11 +100,26 @@ export async function PUT(req: Request, { params }: { params: Params }) {
       return NextResponse.json({ error: "Task not found" }, { status: 404 });
     }
 
-    // Update task content
-    task.content = content;
-    task.label = label;
+    // If the label is changed, find the next available uniqueId for the new label
+    if (task.label !== newLabel) {
+      const taskNumbers = column.tasks
+        .filter((t) => t.label === newLabel && t.uniqueId) // Find tasks with the same new label
+        .map((t) => {
+          const uniqueIdStr = String(t.uniqueId);
+          const match = uniqueIdStr.match(new RegExp(`^${newLabel}-(\\d+)$`));
+          return match ? parseInt(match[1], 10) : null;
+        })
+        .filter((num): num is number => num !== null);
 
-    // Save the updated page with the modified task
+      const nextTaskNumber = taskNumbers.length > 0 ? Math.max(...taskNumbers) + 1 : 1;
+      task.uniqueId = `${newLabel}-${nextTaskNumber}`; // Assign new uniqueId
+    }
+
+    // Update task properties
+    task.content = content;
+    task.label = newLabel;
+
+    // Save the updated page
     await page.save();
 
     return NextResponse.json({
