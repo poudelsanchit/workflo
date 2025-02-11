@@ -76,6 +76,7 @@ export async function PATCH(req: Request, { params }: { params: Params }) {
     );
   }
 }
+
 export async function DELETE(req: Request, { params }: { params: Params }) {
   await dbConnect();
   try {

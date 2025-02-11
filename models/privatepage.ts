@@ -33,6 +33,9 @@ const PrivatePageSchema: Schema<IPrivatePage> = new Schema(
               content: {
                 type: String,
               },
+              label: {
+                type: String,
+              },
             },
           ],
           default: [],

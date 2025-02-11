@@ -41,9 +41,10 @@ import {
 } from "@/components/ui/form";
 import { toast } from "sonner";
 import axios from "axios";
-import { Id } from "@/types/types";
+import { Id, Task } from "@/types/types";
 
 interface Props {
+  task: Task;
   content: string;
   editMode: boolean;
   onChange: any;
@@ -51,13 +52,22 @@ interface Props {
   toggleEditMode: () => void;
   columnId: string;
   taskId: string | number;
-  updateTask: (id: Id, content: string, columnId: string) => void;
+  updateTask: (
+    id: Id,
+    content: string,
+    columnId: string,
+    label: string
+  ) => void;
 }
 
 const formSchema = z.object({
   content: z.string().min(2).max(50),
+  label: z.string({
+    required_error: "Please select an label.",
+  }),
 });
 export default function TaskDialog({
+  task,
   content,
   editMode,
   onChange,
@@ -71,7 +81,8 @@ export default function TaskDialog({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      content: content,
+      content: task.content,
+      label: task.label,
     },
   });
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -82,11 +93,13 @@ export default function TaskDialog({
         {
           content: values.content,
           taskId,
+          label: values.label,
         }
       );
+      console.log(response);
       if (response.status === 200) {
-        const { content, id, columnId } = response.data.updatedTask;
-        updateTask(id, content, columnId);
+        const { content, id, columnId, label } = response.data.updatedTask;
+        updateTask(id, content, columnId, label);
         // updateTask(response.data.updatedTask);
         toast("Updated Succesfully");
       }
@@ -111,13 +124,18 @@ export default function TaskDialog({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className=" flex flex-col space-y-8  ">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className=" flex flex-col space-y-2   "
+            >
               <FormField
                 control={form.control}
                 name="content"
                 render={({ field }) => (
                   <FormItem className="grid grid-cols-4 items-center gap-4 w-full">
-                    <FormLabel className="text-right ">Task Title</FormLabel>
+                    <FormLabel className="text-right font-semibold ">
+                      Task Title
+                    </FormLabel>
                     <FormControl>
                       <Textarea
                         placeholder="Title..."
@@ -161,29 +179,39 @@ export default function TaskDialog({
                     />
                   </PopoverContent>
                 </Popover>
-              </div>
+              </div> */}
 
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="issue" className="text-right">
-                  Label
-                </Label>
-                <Select>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select a label" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="big">Bug</SelectItem>
-                      <SelectItem value="docs">Documentation</SelectItem>
-                      <SelectItem value="feature">Feature</SelectItem>
-                      <SelectItem value="help">Help</SelectItem>
-                      <SelectItem value="refactor">Refactor</SelectItem>
-                      <SelectItem value="design">Design</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              <FormField
+                control={form.control}
+                name="label"
+                render={({ field }) => (
+                  <FormItem className="grid grid-cols-4 items-center gap-4 w-full">
+                    <FormLabel className="text-right font-semibold ">
+                      Label
+                    </FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value ? field.value : ""}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select a label" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="bug">Bug</SelectItem>
+                        <SelectItem value="docs">Documentation</SelectItem>
+                        <SelectItem value="feature">Feature</SelectItem>
+                        <SelectItem value="help">Help</SelectItem>
+                        <SelectItem value="refactor">Refactor</SelectItem>
+                        <SelectItem value="design">Design</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              {/* <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="issue" className="text-right">
                   Priority
                 </Label>

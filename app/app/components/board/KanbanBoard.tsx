@@ -114,8 +114,10 @@ export default function KanbanBoard({
         `/api/private/${pageId}/column/${columnId}/task`,
         {
           content: task,
+          label: "testing",
         }
       );
+      console.log(response);
       const newTask = response.data.newTask;
       setTasks([...tasks, newTask]);
     } catch (err) {
@@ -123,7 +125,13 @@ export default function KanbanBoard({
       toast("Error creating task");
     }
   };
-  function updateTask(id: Id, content: string, columnId: string) {
+  function updateTask(
+    id: Id,
+    content: string,
+    columnId: string,
+    label: string
+  ) {
+    console.log(label);
     const newTasks = tasks.map((task) => {
       if (task.id !== id) return task;
       return { ...task, content };

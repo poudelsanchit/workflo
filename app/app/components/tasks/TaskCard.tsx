@@ -10,7 +10,12 @@ interface Props {
   pageId: string;
   columnId: any;
   deleteTask: (id: Id) => void;
-  updateTask: (id: Id, content: string,columnId:string) => void;
+  updateTask: (
+    id: Id,
+    content: string,
+    columnId: string,
+    label: string
+  ) => void;
 }
 
 export default function TaskCard({
@@ -103,12 +108,21 @@ export default function TaskCard({
         >
           <Trash size={16} />
         </div>
-        <div className="flex gap-1 items-center text-xs text-[#6a6a6a] py-2">
-          <CalendarRange size={14} />
-          Jan 8, 2025
+        <div className="flex gap-4 items-center text-xs text-[#6a6a6a] py-2">
+          <div className="flex gap-1">
+            <CalendarRange size={14} />
+            Jan 8, 2025
+          </div>
+        </div>
+        <div className="flex  items-center gap-3 border-t-[0.1px] p-1 border-[#4f4e4e]">
+          <div className=" bg-purple-500 text-xs w-max rounded-full px-2 text-black">
+            {task.label}
+          </div>
+          <div className="text-xs text-[#6a6a6a]">{`#${task.label}-22`}</div>
         </div>
       </div>
       <TaskDialog
+        task={task}
         content={task.content}
         columnId={columnId}
         pageId={pageId}

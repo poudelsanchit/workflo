@@ -35,9 +35,9 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
           id: task.id,
           columnId: task.columnId,
           content: task.content,
+          label: task.label,
         })) || [] // Fallback to an empty array if tasks is undefined
     ) || [];
-  console.log(formattedTasks);
 
   if (!data) {
     return <div>Loading...</div>;

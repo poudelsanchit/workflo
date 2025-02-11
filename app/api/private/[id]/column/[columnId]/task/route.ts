@@ -13,8 +13,7 @@ export async function POST(req: Request, { params }: { params: Params }) {
 
   try {
     const { id: pageId, columnId } = params;
-    const { content } = await req.json(); // Extract content for the new task
-
+    const { content, label } = await req.json(); // Extract content for the new task
     // Check if the page exists in the database
     const page = await PrivatePageModel.findById(pageId);
     if (!page) {
@@ -34,6 +33,7 @@ export async function POST(req: Request, { params }: { params: Params }) {
     const newTask = {
       id: new Date().toISOString(), // Using ISO date as a simple task ID (can be replaced with UUID or Mongo ObjectId)
       content, // Task content from the request body
+      label,
       columnId, // The column to which the task belongs
     };
 
@@ -50,6 +50,7 @@ export async function POST(req: Request, { params }: { params: Params }) {
         newTask, // Return the newly created task
         pageId,
         columnId,
+        label,
       },
       { status: 201 }
     );
@@ -67,8 +68,7 @@ export async function PUT(req: Request, { params }: { params: Params }) {
   await dbConnect();
   try {
     const { id: pageId, columnId } = params;
-    console.log(params);
-    const { content, taskId } = await req.json(); // Extract content and task ID
+    const { content, taskId, label } = await req.json(); // Extract content and task ID
 
     const page = await PrivatePageModel.findById(pageId);
     if (!page) {
@@ -92,6 +92,7 @@ export async function PUT(req: Request, { params }: { params: Params }) {
 
     // Update task content
     task.content = content;
+    task.label = label;
 
     // Save the updated page with the modified task
     await page.save();
