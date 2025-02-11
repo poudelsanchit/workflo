@@ -1,9 +1,9 @@
 // app/api/page/route.ts
 
 import { NextResponse } from "next/server";
-import { TeamspacePageModel } from "../../../models/PageModels"; // Import Teamspace Model
 import dbConnect from "@/lib/db"; // Your database connection logic
 import UserModel from "@/models/user"; // Import UserModel
+import { TeamspacePageModel } from "@/models/teamspace";
 
 // Handle POST requests (creating a new page)
 export async function POST(req: Request) {

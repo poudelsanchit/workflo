@@ -8,7 +8,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { UserData, UserPages } from "./app-sidebar";
-import { ChevronRight, Plus, User } from "lucide-react";
+import { ChevronRight, MoreHorizontal, Plus, User } from "lucide-react";
 import Link from "next/link";
 import {
   Collapsible,
@@ -23,11 +23,19 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { Label } from "../ui/label";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 interface NavMainProps {
   pages?: UserPages;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
 }
 export function NavMain({ pages, setUserData }: NavMainProps) {
+  const router = useRouter(); // Initialize router
   const { data: session } = useSession(); // Get session data
   const userId = session?.userId; // Extract userId from session
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -47,6 +55,7 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
       console.log(data);
       setIsDialogOpen(false);
       setPageTitle("");
+      router.push(`/app/${data.newPage._id}`);
       toast("New space created succesfully");
     } catch (error) {
       toast("Error creating the page");
@@ -54,20 +63,23 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
     }
   };
 
+  const handleDeleteSpace = async () => {
+    toast("Space deleted succesfully");
+  };
   return (
     <>
       <SidebarGroup>
-        <SidebarMenu className="text-sm font-semibold">
+        <SidebarMenu className="text-xs font-[450] ">
           <Collapsible asChild defaultOpen={true} className="group/collapsible">
             {/* Private Section */}
-            <SidebarMenuItem className="group/sidebar-item">
-              <CollapsibleTrigger asChild>
+            <SidebarMenuItem>
+              <CollapsibleTrigger asChild className="group/sidebar-item">
                 <SidebarMenuButton
                   tooltip={"Private Page"}
-                  className="dark:text-gray-400"
+                  className="dark:text-sidebar-foreground/70"
                 >
                   <User />
-                  <span>Private</span>
+                  <span>Spaces</span>
                   <div className="flex ml-auto justify-center items-center gap-2  ">
                     <div
                       className="ml-auto p-1 rounded-sm hover:bg-gray-300/20 opacity-0 transition-opacity duration-200 group-hover/sidebar-item:opacity-100"
@@ -79,22 +91,43 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
                       <Plus size={16} />
                     </div>
 
-                    {/* <ChevronRight
-                    size={18}
-                    className=" transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
-                  /> */}
+                    <ChevronRight
+                      size={18}
+                      className=" transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90"
+                    />
                   </div>
                 </SidebarMenuButton>
               </CollapsibleTrigger>
               <CollapsibleContent>
-                <SidebarMenuSub>
+                <SidebarMenuSub className=" w-11/12">
                   {pages?.private.map((page) => (
-                    <SidebarMenuSubItem key={page.title}>
+                    <SidebarMenuSubItem
+                      key={page.title}
+                      className="flex justify-between items-center hover:bg-sidebar-accent rounded-sm  group/sidebar-space-item"
+                    >
                       <SidebarMenuSubButton asChild>
                         <Link href={`/app/${page.pageId}`}>
                           <span>{page.title}</span>
                         </Link>
                       </SidebarMenuSubButton>
+
+                      <DropdownMenu>
+                        <DropdownMenuTrigger className=" focus:outline-none">
+                          <div className="pr-2 cursor-pointer opacity-0 transition-opacity duration-200 group-hover/sidebar-space-item:opacity-100 text-[#6a6a6a] hover:text-white">
+                            <MoreHorizontal size={16} />
+                          </div>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          side="bottom"
+                          align="start"
+                          sideOffset={1}
+                        >
+                          <DropdownMenuItem onClick={handleDeleteSpace}>
+                            <div>Delete</div>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>Rename</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </SidebarMenuSubItem>
                   ))}
                 </SidebarMenuSub>
@@ -102,7 +135,7 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
             </SidebarMenuItem>
           </Collapsible>
 
-          {/* Teamspace Section */}
+          {/* Teamspace Section
           <Collapsible asChild defaultOpen={true} className="group/collapsible">
             <SidebarMenuItem>
               <CollapsibleTrigger asChild>
@@ -129,7 +162,7 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
                 </SidebarMenuSub>
               </CollapsibleContent>
             </SidebarMenuItem>
-          </Collapsible>
+          </Collapsible> */}
         </SidebarMenu>
       </SidebarGroup>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

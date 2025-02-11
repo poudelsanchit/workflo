@@ -4,6 +4,8 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CalendarRange, Trash } from "lucide-react";
 import TaskDialog from "./TaskDialog";
+import { toast } from "sonner";
+import axios from "axios";
 
 interface Props {
   task: Task;
@@ -15,7 +17,7 @@ interface Props {
     content: string,
     columnId: string,
     label: string,
-    uniqueId:string
+    uniqueId: string
   ) => void;
 }
 
@@ -51,6 +53,24 @@ export default function TaskCard({
 
   const toggleEditMode = () => {
     setEditMode((prev) => !prev);
+  };
+  const handleDeleteTask = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the click from reaching the parent div
+    try {
+      const response = await axios.delete(
+        `/api/private/${pageId}/column/${columnId}/task`,
+        {
+          data: { taskId: task.id }, // ✅ Include columnId inside data
+        }
+      );
+      console.log(response.data);
+      if (response.status === 200) {
+        deleteTask(task.id);
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Error deleting the task");
+    }
   };
 
   if (isDragging) {
@@ -102,10 +122,8 @@ export default function TaskCard({
         </p>
 
         <div
-          className=" absolute right-3 bottom-3 cursor-pointer text-red-500"
-          onClick={() => {
-            deleteTask(task.id);
-          }}
+          className=" absolute right-2 bottom-2 cursor-pointer text-red-500 h-7 w-7  flex justify-end items-end pr-1 pb-1"
+          onClick={handleDeleteTask}
         >
           <Trash size={16} />
         </div>

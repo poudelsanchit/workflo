@@ -65,7 +65,7 @@ export async function POST(req: Request, { params }: { params: Params }) {
         pageId,
         columnId,
         label,
-     },
+      },
       { status: 201 }
     );
   } catch (error) {
@@ -111,8 +111,9 @@ export async function PUT(req: Request, { params }: { params: Params }) {
         })
         .filter((num): num is number => num !== null);
 
-      const nextTaskNumber = taskNumbers.length > 0 ? Math.max(...taskNumbers) + 1 : 1;
-      task.uniqueId = `${newLabel}-${nextTaskNumber}`; // Assign new uniqueId
+      const nextTaskNumber =
+        taskNumbers.length > 0 ? Math.max(...taskNumbers) + 1 : 1;
+      task.uniqueId = `${newLabel}-${nextTaskNumber}`; // Assign new uniqueId in the database
     }
 
     // Update task properties
@@ -128,6 +129,47 @@ export async function PUT(req: Request, { params }: { params: Params }) {
     });
   } catch (error) {
     console.error("Error updating task:", error);
+    return NextResponse.json(
+      { error: "Error updating tasks" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: Request, { params }: { params: Params }) {
+  dbConnect();
+  try {
+    const { id: pageId, columnId } = params;
+    const { taskId } = await req.json(); // Extract new label
+
+    const page = await PrivatePageModel.findById(pageId);
+    if (!page) {
+      return NextResponse.json({ message: "Page not found", status: 404 });
+    }
+    const column = page?.column.find((col) => col.id?.toString() === columnId);
+    // Ensure that tasks array exists, otherwise initialize it as an empty array
+    if (!column) {
+      return NextResponse.json({ message: "Column not found", status: 404 });
+    }
+    column.tasks = column.tasks || [];
+    //find task index to delete
+    const taskIndex = column?.tasks?.findIndex(
+      (task) => task.id.toString() === taskId
+    );
+    if (taskIndex === -1) {
+      return NextResponse.json({
+        message: "Column not found",
+        status: 404,
+      });
+    }
+    const deletedTask = column?.tasks.splice(taskIndex, 1);
+    await page?.save();
+    return NextResponse.json({
+      message: "Task deleted succcesfully",
+      deletedTask,
+    });
+  } catch (error) {
+    console.error("Error deleting task:", error);
     return NextResponse.json(
       { error: "Error updating tasks" },
       { status: 500 }
