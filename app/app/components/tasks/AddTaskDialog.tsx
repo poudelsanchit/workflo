@@ -198,12 +198,12 @@ export default function AddTaskDialog({ column, createTask, pageId }: Props) {
               />
               <Button
                 type="submit"
-                className="bg-neutral-950 dark:bg-neutral-50 hover:bg-neutral-950/90 w-max ml-auto"
+                className="bg-neutral-950 dark:bg-neutral-50 hover:bg-neutral-950/90 w-max ml-auto font-semibold"
               >
                 {isRequesting && (
                   <div className="w-[20px] h-[20px] border-[3px] border-t-blue-500 border-gray-300 rounded-full animate-spin"></div>
                 )}
-                Save changes
+                Create Task
               </Button>
             </form>
           </Form>

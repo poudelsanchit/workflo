@@ -69,7 +69,7 @@ export default function ColumnContainer(props: Props) {
       <div
         ref={setNodeRef}
         style={style}
-        className=" w-[300px] h-[500px] max-h-[500px] rounded flex flex-col opacity-40 border-2  "
+        className=" w-[300px] h-[500px] max-h-[500px] rounded flex flex-col opacity-40 bg-[#0b0b0b] border-2  "
       ></div>
     );
   }
@@ -77,14 +77,13 @@ export default function ColumnContainer(props: Props) {
     <div
       ref={setNodeRef}
       style={style}
-      className=" w-[300px] h-[500px] max-h-[500px]  flex flex-col gap-2    p-3 pt-0   "
+      className=" w-[300px] h-[500px] max-h-[500px]  flex flex-col gap-2 bg-[#121212]    p-3 pt-0   "
     >
       {/* Column Title */}
       <div
         {...attributes}
         {...listeners}
-        className="  text-sm   cursor-grab flex items-center justify-between border-b-[3px]"
-        style={{ borderColor: column.color }}
+        className="  text-sm   cursor-grab flex items-center justify-between border-b-[2px] border-neutral-400/40"
       >
         <div className="flex items-center  gap-2 w-full  pb-1 ">
           <div
