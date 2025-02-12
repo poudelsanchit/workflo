@@ -14,7 +14,6 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
-import { toast } from "sonner";
 
 // Add type definitions
 interface Page {
@@ -56,7 +55,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     }
   };
 
-
   useEffect(() => {
     if (status === "authenticated" && session?.userId) {
       handleFetchData(session.userId);
@@ -69,10 +67,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent className="dark:bg-neutral-950 ">
-        <NavMain
-          pages={userData?.pages}
-          setUserData={setUserData}
-        />
+        <NavMain pages={userData?.pages} setUserData={setUserData} />
         <NavProjects />
       </SidebarContent>
       <SidebarFooter className="dark:bg-neutral-950 rounded-b-lg">
