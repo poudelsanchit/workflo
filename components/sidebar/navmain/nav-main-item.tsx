@@ -17,7 +17,7 @@ import { Page, UserData } from "../app-sidebar";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 interface Props {
   userId: string | undefined;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
@@ -25,8 +25,9 @@ interface Props {
 }
 
 export default function NavMainItem({ userId, setUserData, page }: Props) {
-  const { isMobile } = useSidebar();
+  const pathname = usePathname().split("/")[2]; // Get the second part of the pathname
 
+  const { isMobile } = useSidebar();
   const [editMode, setEditMode] = useState(false);
   const [pageTitle, setPageTitle] = useState<string>(page.title);
   const handleNavigateToPage = () => {
@@ -95,15 +96,25 @@ export default function NavMainItem({ userId, setUserData, page }: Props) {
       <Link href={`/app/${page.pageId}`}>
         <SidebarMenuSubItem
           key={page.pageId}
-          className="flex justify-between items-center hover:bg-sidebar-accent rounded-sm  group/sidebar-space-item"
+          className={`flex justify-between items-center hover:bg-sidebar-accent rounded-sm  group/sidebar-space-item ${
+            pathname === page.pageId
+              ? "bg-sidebar-accent text-white"
+              : "text-neutral-400/80"
+          }`}
         >
           <SidebarMenuSubButton asChild>
-            <span className="text-neutral-400/90">{page.title}</span>
+            <span
+              className={` font-semibold tracking-wide text-base ${
+                pathname === page.pageId ? "text-white" : "text-neutral-400/80 hover:text-neutral-400/80"
+              }`}
+            >
+              {page.title}
+            </span>
           </SidebarMenuSubButton>
 
           <DropdownMenu>
             <DropdownMenuTrigger className=" focus:outline-none">
-              <div className="pr-2 cursor-pointer opacity-0 transition-opacity duration-200 group-hover/sidebar-space-item:opacity-100 text-[#6a6a6a] hover:text-white">
+              <div className="pr-2 cursor-pointer opacity-0 transition-opacity duration-200 group-hover/sidebar-space-item:opacity-100 text-[#6a6a6a] ">
                 <MoreHorizontal size={16} />
               </div>
             </DropdownMenuTrigger>
