@@ -83,30 +83,6 @@ export default function TaskCard({
     );
   }
 
-  // if (editMode) {
-  //   return (
-  //     <div
-  //       ref={setNodeRef}
-  //       style={style}
-  //       {...attributes}
-  //       {...listeners}
-  //       className="task bg-white relative border-2 border-[#e8e8e8] shadow-sm text-black text-sm p-2.5 h-18 min-h-max flex flex-col pt-4 pb-2 rounded-md text-left cursor-grab"
-  //     >
-  //       <textarea
-  //         autoFocus
-  //         className="h-[90%] w-full resize-none border-none rounded bg-transparent text-black focus:outline-none"
-  //         value={task.content}
-  //         placeholder="Task content here"
-  //         onBlur={toggleEditMode}
-  //         onKeyDown={(e) => {
-  //           if (e.key === "Enter" && !e.shiftKey) toggleEditMode();
-  //         }}
-  //         onChange={(e) => updateTask(task.id, e.target.value)}
-  //       />
-  //     </div>
-  //   );
-  // }
-
   return (
     <>
       <div

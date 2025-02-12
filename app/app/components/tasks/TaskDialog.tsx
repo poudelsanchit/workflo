@@ -140,6 +140,7 @@ export default function TaskDialog({
                     </FormLabel>
                     <FormControl>
                       <Textarea
+                        autoFocus
                         placeholder="Title..."
                         {...field}
                         className=" w-96"

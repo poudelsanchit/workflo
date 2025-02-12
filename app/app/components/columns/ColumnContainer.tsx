@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import AddTask from "../tasks/AddTask";
 
 interface Props {
   column: Column;
@@ -101,7 +102,7 @@ export default function ColumnContainer(props: Props) {
           <div className="flex justify-center items-center py-1 text-sm rounded-full text-neutral-400">
             {3}
           </div>
-          <div className="w-full">
+          <div className="w-full ">
             {editMode && (
               <input
                 autoFocus
@@ -165,38 +166,11 @@ export default function ColumnContainer(props: Props) {
         </SortableContext>
       </div>
       {isAddingTask && (
-        <div className="flex flex-col gap-2">
-          <textarea
-            autoFocus
-            placeholder="Add new task..."
-            className="w-full text-black dark:text-white rounded border border-neutral-950 dark:border-[#252528] bg-violet-400/20 dark:bg-neutral-950 p-3 text-sm  placeholder-neutral-900 placeholder:font-semibold dark:placeholder:text-white focus:outline-0"
-            value={newTask}
-            onChange={(e) => {
-              setNewTask(e.target.value);
-            }}
-          />
-          <div className="flex ml-auto  gap-2">
-            <Button
-              variant={"outline"}
-              className="text-black h-8 dark:text-white dark:hover:bg-neutral-950/80 rounded-sm"
-              onClick={() => {
-                setIsAddingTask(false);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              className="h-8 rounded-sm"
-              onClick={() => {
-                createTask(column.id, newTask);
-                setIsAddingTask(false);
-                setNewTask("");
-              }}
-            >
-              Create
-            </Button>
-          </div>
-        </div>
+        <AddTask
+          column={column}
+          createTask={createTask}
+          setIsAddingTask={setIsAddingTask}
+        />
       )}
 
       {!isAddingTask && (
