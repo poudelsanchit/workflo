@@ -1,28 +1,32 @@
 "use client";
-
-import { Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   SidebarGroup,
   SidebarMenu,
-  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar";
 import React from "react";
-import { Settings, Trash, MessageCircleQuestion } from "lucide-react";
+import {
+  Settings,
+  Trash,
+  MessageCircleQuestion,
+  Home,
+  Inbox,
+} from "lucide-react";
 import Link from "next/link";
 
-export function NavProjects() {
+export function NavHeader() {
   const [projects] = React.useState([
+    {
+      name: "Home",
+      url: "/app",
+      icon: Home,
+    },
+    {
+      name: "Inbox",
+      url: "/app/inbox",
+      icon: Inbox,
+    },
     {
       name: "Settings",
       url: "/app/settings",
@@ -36,7 +40,7 @@ export function NavProjects() {
   ]);
 
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup className="group-data-[collapsible=icon]">
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>

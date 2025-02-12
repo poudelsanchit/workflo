@@ -16,6 +16,8 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
+import { NavHeader } from "./navheader/nav-header";
+import { Separator } from "../ui/separator";
 
 export interface Page {
   pageId: string;
@@ -67,9 +69,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader className="dark:bg-neutral-950 rounded-t-lg">
         <TeamSwitcher />
       </SidebarHeader>
-      <SidebarContent className="dark:bg-neutral-950 ">
+      <SidebarContent className="dark:bg-neutral-950 gap-0">
+        <NavHeader />
+        <div className="px-4 py-2">
+          <Separator />
+        </div>
         <NavMain pages={userData?.pages} setUserData={setUserData} />
-        <NavProjects />
       </SidebarContent>
       <SidebarFooter className="dark:bg-neutral-950 rounded-b-lg">
         <NavUser

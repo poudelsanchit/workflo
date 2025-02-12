@@ -8,7 +8,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { UserData, UserPages } from "../app-sidebar";
-import { ChevronRight, MoreHorizontal, Plus, User } from "lucide-react";
+import { ChevronRight, MoreHorizontal, PanelsTopLeft, Plus, User } from "lucide-react";
 import Link from "next/link";
 import {
   Collapsible,
@@ -28,12 +28,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { Label } from "../../ui/label";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../ui/dropdown-menu";
+
 import { useRouter } from "next/navigation";
 import NavMainItem from "./nav-main-item";
 interface NavMainProps {
@@ -68,22 +63,6 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
     }
   };
 
-  const handleDeleteSpace = async ({ pageId }: { pageId: string }) => {
-    try {
-      const response = await axios.delete(`/api/private/${pageId}`, {
-        data: { userId: userId },
-      });
-      if (response.data) {
-        // handleDeletePage(pageId);
-        setUserData(response.data.user);
-
-        console.log(response.data.user);
-      }
-    } catch (error) {
-      console.log(error);
-      toast("Error deleting space");
-    }
-  };
   return (
     <>
       <SidebarGroup>
@@ -94,10 +73,10 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
               <CollapsibleTrigger asChild className="group/sidebar-item">
                 <SidebarMenuButton
                   tooltip={"Private Page"}
-                  className="dark:text-sidebar-foreground/70"
+                  className="font-semibold"
                 >
-                  <User />
-                  <span>Spaces</span>
+                  <PanelsTopLeft />
+                  <span>Pages</span>
                   <div className="flex ml-auto justify-center items-center gap-2  ">
                     <div
                       className="ml-auto p-1 rounded-sm hover:bg-gray-300/20 opacity-0 transition-opacity duration-200 group-hover/sidebar-item:opacity-100"

@@ -7,14 +7,17 @@ import {
 import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import axios from "axios";
-import { MoreHorizontal } from "lucide-react";
+import { Edit, Folder, Forward, MoreHorizontal, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Page, UserData } from "../app-sidebar";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import { redirect } from "next/navigation";
 interface Props {
   userId: string | undefined;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
@@ -22,8 +25,13 @@ interface Props {
 }
 
 export default function NavMainItem({ userId, setUserData, page }: Props) {
+  const { isMobile } = useSidebar();
+
   const [editMode, setEditMode] = useState(false);
   const [pageTitle, setPageTitle] = useState<string>(page.title);
+  const handleNavigateToPage = () => {
+    redirect(`/app/${page.pageId}`);
+  };
   const handleEditSpace = async () => {
     if (pageTitle === page.title) return;
     try {
@@ -90,7 +98,7 @@ export default function NavMainItem({ userId, setUserData, page }: Props) {
           className="flex justify-between items-center hover:bg-sidebar-accent rounded-sm  group/sidebar-space-item"
         >
           <SidebarMenuSubButton asChild>
-            <span>{page.title}</span>
+            <span className="text-neutral-400/90">{page.title}</span>
           </SidebarMenuSubButton>
 
           <DropdownMenu>
@@ -99,20 +107,32 @@ export default function NavMainItem({ userId, setUserData, page }: Props) {
                 <MoreHorizontal size={16} />
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent side="bottom" align="start" sideOffset={1}>
-              <DropdownMenuItem
-                onClick={() => {
-                  handleDeleteSpace({ pageId: page.pageId });
-                }}
-              >
-                <div>Delete</div>
+
+            <DropdownMenuContent
+              className="w-48 rounded-lg"
+              side={isMobile ? "bottom" : "right"}
+              align={isMobile ? "end" : "start"}
+            >
+              <DropdownMenuItem onClick={handleNavigateToPage}>
+                <Folder className="text-muted-foreground" />
+                <span>View Project</span>
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
                   setEditMode(true);
                 }}
               >
-                Rename
+                <Edit className="text-muted-foreground" />
+                <span>Rename Project</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => {
+                  handleDeleteSpace({ pageId: page.pageId });
+                }}
+              >
+                <Trash2 className="text-muted-foreground" />
+                <span>Delete Project</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
