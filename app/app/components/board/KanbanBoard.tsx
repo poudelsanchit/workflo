@@ -226,10 +226,6 @@ export default function KanbanBoard({
     </div>
   );
 
-  function generateId() {
-    return Math.floor(Math.random() * 10000);
-  }
-
   function deleteTask(id: Id) {
     const newTasks = tasks.filter((task) => task.id !== id);
     setTasks(newTasks);
