@@ -34,7 +34,10 @@ interface NavMainProps {
   pages?: UserPages;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
 }
-export function NavMain({ pages, setUserData }: NavMainProps) {
+export function NavMain({
+  pages,
+  setUserData,
+}: NavMainProps) {
   const router = useRouter(); // Initialize router
   const { data: session } = useSession(); // Get session data
   const userId = session?.userId; // Extract userId from session
@@ -52,7 +55,6 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
       if (response.status) {
         setUserData(data.user);
       }
-      console.log(data);
       setIsDialogOpen(false);
       setPageTitle("");
       router.push(`/app/${data.newPage._id}`);
@@ -63,8 +65,21 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
     }
   };
 
-  const handleDeleteSpace = async () => {
-    toast("Space deleted succesfully");
+  const handleDeleteSpace = async ({ pageId }: { pageId: string }) => {
+    try {
+      const response = await axios.delete(`/api/private/${pageId}`, {
+        data: { userId: userId },
+      });
+      if (response.data) {
+        // handleDeletePage(pageId);
+        setUserData(response.data.user);
+
+        console.log(response.data.user);
+      }
+    } catch (error) {
+      console.log(error);
+      toast("Error deleting space");
+    }
   };
   return (
     <>
@@ -102,7 +117,7 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
                 <SidebarMenuSub className=" w-11/12">
                   {pages?.private.map((page) => (
                     <SidebarMenuSubItem
-                      key={page.title}
+                      key={page.pageId}
                       className="flex justify-between items-center hover:bg-sidebar-accent rounded-sm  group/sidebar-space-item"
                     >
                       <SidebarMenuSubButton asChild>
@@ -122,7 +137,11 @@ export function NavMain({ pages, setUserData }: NavMainProps) {
                           align="start"
                           sideOffset={1}
                         >
-                          <DropdownMenuItem onClick={handleDeleteSpace}>
+                          <DropdownMenuItem
+                            onClick={() => {
+                              handleDeleteSpace({ pageId: page.pageId });
+                            }}
+                          >
                             <div>Delete</div>
                           </DropdownMenuItem>
                           <DropdownMenuItem>Rename</DropdownMenuItem>

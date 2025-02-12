@@ -72,7 +72,6 @@ export async function DELETE(
     return NextResponse.json({
       message: "Space Deleted Sucessfully",
       user,
-      deletedSpace,
       success: true,
       status: 200,
     });

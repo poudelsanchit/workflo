@@ -131,7 +131,6 @@ export default function KanbanBoard({
     uniqueId: string
 
   ) {
-    console.log(label);
     const newTasks = tasks.map((task) => {
       if (task.id !== id) return task;
       return { ...task, content,label,uniqueId };
