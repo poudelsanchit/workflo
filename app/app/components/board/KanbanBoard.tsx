@@ -233,6 +233,7 @@ export default function KanbanBoard({
   function deleteTask(id: Id) {
     const newTasks = tasks.filter((task) => task.id !== id);
     setTasks(newTasks);
+    toast("Task deleted sucessfully");
   }
 
   function onDragStart(event: DragStartEvent) {
