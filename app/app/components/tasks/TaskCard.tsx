@@ -3,9 +3,10 @@ import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { CalendarRange, Trash } from "lucide-react";
-import TaskDialog from "./TaskDialog";
 import { toast } from "sonner";
 import axios from "axios";
+import { LABEL_COLORS } from "@/constants/labelColors";
+import EditTaskDialog from "./EditTaskDialog";
 
 interface Props {
   task: Task;
@@ -91,32 +92,41 @@ export default function TaskCard({
         {...attributes}
         {...listeners}
         onClick={toggleEditMode}
-        className="task dark:bg-neutral-950 dark:text-white bg-black text-white relative  font-semibold  shadow-sm  text-sm p-2.5 h-18 min-h-max flex flex-col pt-4 pb-2 rounded-md text-left cursor-grab"
+        className=" flex flex-col gap-2  task dark:bg-neutral-950 dark:text-white bg-black text-white relative  font-semibold  shadow-sm  text-sm p-2.5 h-18 min-h-max pt-4 pb-2 rounded-md text-left cursor-grab"
       >
         <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap text-sm pb-1">
           {task.content}
         </p>
 
         <div
-          className=" absolute right-2 bottom-2 cursor-pointer text-red-500 h-7 w-7  flex justify-end items-end pr-1 pb-1"
+          className=" absolute right-2 bottom-2 cursor-pointer text-[#6a6a6a] h-7 w-7  flex justify-end items-end pr-1 pb-1"
           onClick={handleDeleteTask}
         >
           <Trash size={16} />
         </div>
-        <div className="flex gap-4 items-center text-xs text-[#6a6a6a] py-2">
+
+        {/* TODO: Will be implementing deadline functionality here
+         <div className="flex gap-4 items-center text-xs text-[#6a6a6a] py-2">
           <div className="flex gap-1">
             <CalendarRange size={14} />
             Jan 8, 2025
           </div>
-        </div>
+        </div> */}
         <div className="flex  items-center gap-3  p-1">
-          <div className=" bg-purple-500 text-xs w-max rounded-full px-2 text-black">
-            {task.label}
+          <div
+            className=" bg-purple-500 text-xs w-max rounded-full px-2 py-[0.5px] text-black"
+            style={{
+              backgroundColor:
+                LABEL_COLORS[task?.label ?? "default"].backgroundColor,
+              color: LABEL_COLORS[task?.label ?? "default"].textColor,
+            }}
+          >
+            {`#${task.uniqueId}`}
           </div>
-          <div className="text-xs text-[#6a6a6a]">{`#${task.uniqueId}`}</div>
+          {/* <div className="text-xs text-[#6a6a6a]">{`#${task.uniqueId}`}</div> */}
         </div>
       </div>
-      <TaskDialog
+      <EditTaskDialog
         task={task}
         content={task.content}
         columnId={columnId}

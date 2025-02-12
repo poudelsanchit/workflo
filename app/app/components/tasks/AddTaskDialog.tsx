@@ -33,6 +33,7 @@ import { toast } from "sonner";
 import { Column, Id, Task } from "@/types/types";
 import { BsPlus } from "react-icons/bs";
 import axios from "axios";
+import { LABEL_COLORS } from "@/constants/labelColors";
 
 interface Props {
   createTask: (newTask: Task) => void;
@@ -50,6 +51,38 @@ const formSchema = z.object({
 export default function AddTaskDialog({ column, createTask, pageId }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [isRequesting, setIsRequesting] = useState(false);
+  const labels = [
+    {
+      id: "feature",
+      label: "Feature",
+    },
+    {
+      id: "design",
+      label: "Design",
+    },
+    {
+      id: "bug",
+      label: "Bug",
+    },
+    {
+      id: "docs",
+      label: "Documentation",
+    },
+
+    {
+      id: "help",
+      label: "Help",
+    },
+    {
+      id: "refactor",
+      label: "Refactor",
+    },
+
+    {
+      id: "improvement",
+      label: "Improvement",
+    },
+  ];
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -140,12 +173,22 @@ export default function AddTaskDialog({ column, createTask, pageId }: Props) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="border-[#252528]">
-                          <SelectItem value="bug">Bug</SelectItem>
-                          <SelectItem value="docs">Documentation</SelectItem>
-                          <SelectItem value="feature">Feature</SelectItem>
-                          <SelectItem value="help">Help</SelectItem>
-                          <SelectItem value="refactor">Refactor</SelectItem>
-                          <SelectItem value="design">Design</SelectItem>
+                          {labels.map((l) => {
+                            return (
+                              <SelectItem value={l.id}>
+                                <div className="flex justify-center items-center gap-2">
+                                  <div
+                                    className="h-3 w-3 rounded-full"
+                                    style={{
+                                      backgroundColor:
+                                        LABEL_COLORS[l.id].backgroundColor,
+                                    }}
+                                  ></div>
+                                  <div>{l.label}</div>
+                                </div>
+                              </SelectItem>
+                            );
+                          })}
                         </SelectContent>
                       </Select>
                     </FormItem>
