@@ -2,7 +2,6 @@ import { Column, Id, Task } from "@/types/types";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
-import { BsPlus } from "react-icons/bs";
 import TaskCard from "../tasks/TaskCard";
 import { MoreHorizontal } from "lucide-react";
 import {
@@ -11,15 +10,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import AddTask from "../tasks/AddTask";
+import AddTaskDialog from "../tasks/AddTaskDialog";
 
 interface Props {
   column: Column;
   pageId: string;
   deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
-  createTask: (columnId: Id, newTask: string) => void;
+  createTask: (newTask: Task) => void;
   tasks: Task[];
   deleteTask: (id: Id) => void;
   updateTask: (
@@ -42,8 +40,6 @@ export default function ColumnContainer(props: Props) {
     updateTask,
   } = props;
   const [editMode, setEditMode] = useState(false);
-  const [isAddingTask, setIsAddingTask] = useState(false);
-  const [newTask, setNewTask] = useState("");
   const tasksIds = useMemo(() => {
     return tasks.map((task) => task.id);
   }, [tasks]);
@@ -165,24 +161,8 @@ export default function ColumnContainer(props: Props) {
           })}
         </SortableContext>
       </div>
-      {isAddingTask && (
-        <AddTask
-          column={column}
-          createTask={createTask}
-          setIsAddingTask={setIsAddingTask}
-        />
-      )}
 
-      {!isAddingTask && (
-        <button
-          onClick={() => {
-            setIsAddingTask(true);
-          }}
-          className="flex justify-center items-center text-sm text-neutral-600 dark:text-gray-400 font-semibold  transition-all duration-100 mr-auto pl-1 "
-        >
-          Add Task <BsPlus size={16} />
-        </button>
-      )}
+      <AddTaskDialog column={column} createTask={createTask} pageId={pageId} />
     </div>
   );
 }

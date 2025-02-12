@@ -107,21 +107,9 @@ export default function KanbanBoard({
     }
   };
 
-  const createTask = async (columnId: Id, task: string) => {
-    try {
-      const response = await axios.post(
-        `/api/private/${pageId}/column/${columnId}/task`,
-        {
-          content: task,
-          label: "bug",
-        }
-      );
-      const newTask = response.data.newTask;
-      setTasks([...tasks, newTask]);
-    } catch (err) {
-      console.log(err);
-      toast("Error creating task");
-    }
+  const createTask = async (newTask: Task) => {
+    console.log(newTask);
+    setTasks([...tasks, newTask]);
   };
   function updateTask(
     id: Id,
@@ -129,11 +117,10 @@ export default function KanbanBoard({
     columnId: string,
     label: string,
     uniqueId: string
-
   ) {
     const newTasks = tasks.map((task) => {
       if (task.id !== id) return task;
-      return { ...task, content,label,uniqueId };
+      return { ...task, content, label, uniqueId };
     });
     setTasks(newTasks);
   }
