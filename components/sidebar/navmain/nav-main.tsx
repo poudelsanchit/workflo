@@ -7,37 +7,40 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { UserData, UserPages } from "./app-sidebar";
+import { UserData, UserPages } from "../app-sidebar";
 import { ChevronRight, MoreHorizontal, Plus, User } from "lucide-react";
 import Link from "next/link";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "../ui/collapsible";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
+} from "../../ui/collapsible";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../ui/dialog";
+import { Input } from "../../ui/input";
+import { Button } from "../../ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { Label } from "../ui/label";
+import { Label } from "../../ui/label";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "../../ui/dropdown-menu";
 import { useRouter } from "next/navigation";
+import NavMainItem from "./nav-main-item";
 interface NavMainProps {
   pages?: UserPages;
   setUserData: React.Dispatch<React.SetStateAction<UserData | null>>;
 }
-export function NavMain({
-  pages,
-  setUserData,
-}: NavMainProps) {
+export function NavMain({ pages, setUserData }: NavMainProps) {
   const router = useRouter(); // Initialize router
   const { data: session } = useSession(); // Get session data
   const userId = session?.userId; // Extract userId from session
@@ -116,38 +119,12 @@ export function NavMain({
               <CollapsibleContent>
                 <SidebarMenuSub className=" w-11/12">
                   {pages?.private.map((page) => (
-                    <SidebarMenuSubItem
+                    <NavMainItem
+                      userId={session?.userId}
+                      setUserData={setUserData}
+                      page={page}
                       key={page.pageId}
-                      className="flex justify-between items-center hover:bg-sidebar-accent rounded-sm  group/sidebar-space-item"
-                    >
-                      <SidebarMenuSubButton asChild>
-                        <Link href={`/app/${page.pageId}`}>
-                          <span>{page.title}</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-
-                      <DropdownMenu>
-                        <DropdownMenuTrigger className=" focus:outline-none">
-                          <div className="pr-2 cursor-pointer opacity-0 transition-opacity duration-200 group-hover/sidebar-space-item:opacity-100 text-[#6a6a6a] hover:text-white">
-                            <MoreHorizontal size={16} />
-                          </div>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                          side="bottom"
-                          align="start"
-                          sideOffset={1}
-                        >
-                          <DropdownMenuItem
-                            onClick={() => {
-                              handleDeleteSpace({ pageId: page.pageId });
-                            }}
-                          >
-                            <div>Delete</div>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem>Rename</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </SidebarMenuSubItem>
+                    />
                   ))}
                 </SidebarMenuSub>
               </CollapsibleContent>
@@ -214,7 +191,6 @@ export function NavMain({
                   className="w-full  text-white bg-black"
                   onClick={(e) => {
                     e.preventDefault();
-
                     setIsDialogOpen(false);
                   }}
                 >

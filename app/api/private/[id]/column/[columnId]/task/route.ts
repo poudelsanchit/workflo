@@ -76,6 +76,8 @@ export async function POST(req: Request, { params }: { params: Params }) {
     );
   }
 }
+
+
 export async function PUT(req: Request, { params }: { params: Params }) {
   await dbConnect();
   try {

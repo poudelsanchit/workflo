@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from "next/server";
 interface Params {
   id: string;
 }
+
+// get page or space details functionality
 export async function GET(
   request: NextRequest,
   { params }: { params: Params }
@@ -54,7 +56,7 @@ export async function DELETE(
     );
     if (pageIndexInUserModel === -1) {
       return NextResponse.json({
-        message: "Column not found",
+        message: "page not found",
         status: 404,
       });
     }
@@ -77,5 +79,64 @@ export async function DELETE(
     });
   } catch (error) {
     return NextResponse.json("Error deleting the space");
+  }
+}
+export async function PUT(req: Request, { params }: { params: Params }) {
+  await dbConnect();
+  try {
+    const spaceId = params.id;
+    const { userId, title } = await req.json(); // Extract new title
+
+    // Find user
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return NextResponse.json(
+        { message: "User not found", success: false },
+        { status: 404 }
+      );
+    }
+
+    // Find the space in user's private pages
+    const pageIndexInUserModel = user.pages.private.findIndex(
+      (space: any) => space.pageId.toString() === spaceId
+    );
+    if (pageIndexInUserModel === -1) {
+      return NextResponse.json(
+        { message: "Page not found", success: false },
+        { status: 404 }
+      );
+    }
+
+    // Update the title in UserModel
+    user.pages.private[pageIndexInUserModel].title = title;
+    await user.save(); // Save updated user model
+
+    // Update the title in PrivatePageModel
+    const page = await PrivatePageModel.findByIdAndUpdate(
+      spaceId,
+      { title },
+      { new: true } // Return the updated document
+    );
+
+    if (!page) {
+      return NextResponse.json(
+        { message: "Page not found", success: false },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      message: "Space title updated successfully",
+      success: true,
+      updatedTitle: page.title,
+      user,
+      status: 200,
+    });
+  } catch (error) {
+    console.error("Error updating space:", error);
+    return NextResponse.json(
+      { message: "Error updating space", success: false },
+      { status: 500 }
+    );
   }
 }

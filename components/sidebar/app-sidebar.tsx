@@ -3,7 +3,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { NavMain } from "@/components/sidebar/nav-main";
+import { NavMain } from "@/components/sidebar/navmain/nav-main";
 import { NavProjects } from "@/components/sidebar/nav-utilities";
 import { TeamSwitcher } from "@/components/sidebar/team-switcher";
 import {
@@ -16,7 +16,7 @@ import {
 import { NavUser } from "./nav-user";
 
 // Add type definitions
-interface Page {
+export interface Page {
   pageId: string;
   title: string;
   _id?: string;
