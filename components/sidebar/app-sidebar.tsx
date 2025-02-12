@@ -1,8 +1,10 @@
 "use client";
 import * as React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useAtom } from "jotai"; // Import useAtom
+import { userAtom } from "@/atoms/userAtom"; // Import the atom
 import { NavMain } from "@/components/sidebar/navmain/nav-main";
 import { NavProjects } from "@/components/sidebar/nav-utilities";
 import { TeamSwitcher } from "@/components/sidebar/team-switcher";
@@ -15,7 +17,6 @@ import {
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
 
-// Add type definitions
 export interface Page {
   pageId: string;
   title: string;
@@ -41,7 +42,7 @@ export interface UserData {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [userData, setUserData] = useState<UserData | null>(null); // Properly typed state
+  const [userData, setUserData] = useAtom(userAtom); // Use Jotai's useAtom hook
   const { data: session, status } = useSession();
 
   const handleFetchData = async (userId: string) => {
@@ -49,7 +50,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       const response = await axios.get<{ message: string; user: UserData }>(
         `/api/user?userId=${userId}`
       );
-      setUserData(response.data.user);
+      setUserData(response.data.user); // Update atom state
     } catch (error) {
       console.error("API Error:", error);
     }

@@ -17,14 +17,22 @@ import {
 } from "@/components/ui/sidebar";
 import { usePathname } from "next/navigation";
 import { ThemeToggler } from "./components/theme/ThemeToggler";
+import { useAtom } from "jotai"; // Import useAtom
+import { userAtom } from "@/atoms/userAtom"; // Import the atom
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname().split("/")[2];
+  const pathname = usePathname().split("/")[2]; // Get the second part of the pathname
   const { open } = useSidebar(); // Get sidebar state
+  const [userData] = useAtom(userAtom); // Accessing userData (no setter needed here)
+
+  // Find the page that matches the pathname with the pageId from userData.pages.private
+  const pageTitle =
+    userData?.pages.private.find((page) => page.pageId === pathname)?.title ||
+    "Default Title"; // Fallback to 'Default Title' if no match
 
   return (
     <>
@@ -32,7 +40,7 @@ export default function Layout({
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
           <div className="flex items-center px-4 w-full justify-between">
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center font-semibold">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
               <Breadcrumb>
@@ -42,7 +50,7 @@ export default function Layout({
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden md:block" />
                   <BreadcrumbItem>
-                    <BreadcrumbPage>{pathname}</BreadcrumbPage>
+                    <BreadcrumbPage className="font-semibold">{pageTitle}</BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
@@ -53,7 +61,7 @@ export default function Layout({
         <div
           className={`flex flex-1 flex-col gap-4 p-4 pt-0 overflow-y-auto h-[calc(100vh-4rem)] ${
             open ? "w-[calc(100vw-16rem)]" : "w-[calc(100vw-4.2rem)]"
-          } `}
+          }`}
         >
           {children}
         </div>
