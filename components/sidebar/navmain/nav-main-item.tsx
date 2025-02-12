@@ -25,6 +25,7 @@ export default function NavMainItem({ userId, setUserData, page }: Props) {
   const [editMode, setEditMode] = useState(false);
   const [pageTitle, setPageTitle] = useState<string>(page.title);
   const handleEditSpace = async () => {
+    if (pageTitle === page.title) return;
     try {
       const response = await axios.put(`/api/private/${page.pageId}`, {
         userId: userId,
@@ -83,41 +84,40 @@ export default function NavMainItem({ userId, setUserData, page }: Props) {
   }
   return (
     <>
-      <SidebarMenuSubItem
-        key={page.pageId}
-        className="flex justify-between items-center hover:bg-sidebar-accent rounded-sm  group/sidebar-space-item"
-      >
-        <SidebarMenuSubButton asChild>
-          <Link href={`/app/${page.pageId}`}>
+      <Link href={`/app/${page.pageId}`}>
+        <SidebarMenuSubItem
+          key={page.pageId}
+          className="flex justify-between items-center hover:bg-sidebar-accent rounded-sm  group/sidebar-space-item"
+        >
+          <SidebarMenuSubButton asChild>
             <span>{page.title}</span>
-          </Link>
-        </SidebarMenuSubButton>
+          </SidebarMenuSubButton>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger className=" focus:outline-none">
-            <div className="pr-2 cursor-pointer opacity-0 transition-opacity duration-200 group-hover/sidebar-space-item:opacity-100 text-[#6a6a6a] hover:text-white">
-              <MoreHorizontal size={16} />
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent side="bottom" align="start" sideOffset={1}>
-            <DropdownMenuItem
-              onClick={() => {
-                handleDeleteSpace({ pageId: page.pageId });
-              }}
-            >
-              <div>Delete</div>
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                setEditMode(true);
-                toast("Rename functionality");
-              }}
-            >
-              Rename
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuSubItem>
+          <DropdownMenu>
+            <DropdownMenuTrigger className=" focus:outline-none">
+              <div className="pr-2 cursor-pointer opacity-0 transition-opacity duration-200 group-hover/sidebar-space-item:opacity-100 text-[#6a6a6a] hover:text-white">
+                <MoreHorizontal size={16} />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="start" sideOffset={1}>
+              <DropdownMenuItem
+                onClick={() => {
+                  handleDeleteSpace({ pageId: page.pageId });
+                }}
+              >
+                <div>Delete</div>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setEditMode(true);
+                }}
+              >
+                Rename
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </SidebarMenuSubItem>
+      </Link>
     </>
   );
 }
