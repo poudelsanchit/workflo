@@ -269,10 +269,6 @@ export default function KanbanBoard({
     }
   }
   function onDragEnd(event: DragEndEvent) {
-    if (!navigator.onLine) {
-      toast.error("No internet connection.");
-      return;
-    }
     setActiveColumn(null);
     setActiveTask(null);
 
@@ -281,7 +277,10 @@ export default function KanbanBoard({
     const activeId = active.id;
     const overId = over.id;
     if (activeId === overId) return;
-
+    if (!navigator.onLine) {
+      toast.error("No internet connection.");
+      return;
+    }
     setColumns((columns) => {
       const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
       const overColumnIndex = columns.findIndex((col) => col.id === overId);
