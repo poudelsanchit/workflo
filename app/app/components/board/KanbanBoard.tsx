@@ -1,5 +1,5 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Column, Id, Task } from "@/types/types";
 import ColumnContainer from "../columns/ColumnContainer";
 import {
@@ -125,6 +125,33 @@ export default function KanbanBoard({
     setTasks(newTasks);
   }
 
+  const persistColumnOrder = async (updatedColumns: Column[]) => {
+    if (!navigator.onLine) {
+      toast.error("No internet connection.");
+      return;
+    }
+    try {
+      console.log(updatedColumns);
+      const response = await axios.patch(
+        `/api/private/${pageId}/column/reorder`,
+        {
+          reorderedColumns: updatedColumns,
+        }
+      );
+      console.log(response);
+      toast("Columns reordered succesfully");
+    } catch (error) {
+      toast.error("Failed to update column order.");
+    }
+  };
+
+  // Track column order
+  useEffect(() => {
+    if (columns !== column) {
+      persistColumnOrder(columns);
+    }
+  }, [columns]); // ✅ Runs only when `columns` state updates
+
   return (
     <div className="flex h-full w-full gap-3  relative">
       <DndContext
@@ -242,6 +269,10 @@ export default function KanbanBoard({
     }
   }
   function onDragEnd(event: DragEndEvent) {
+    if (!navigator.onLine) {
+      toast.error("No internet connection.");
+      return;
+    }
     setActiveColumn(null);
     setActiveTask(null);
 
@@ -254,7 +285,8 @@ export default function KanbanBoard({
     setColumns((columns) => {
       const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
       const overColumnIndex = columns.findIndex((col) => col.id === overId);
-      return arrayMove(columns, activeColumnIndex, overColumnIndex);
+      const newColumns = arrayMove(columns, activeColumnIndex, overColumnIndex);
+      return newColumns;
     });
   }
   function onDragOver(event: DragOverEvent) {
